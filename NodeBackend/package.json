@@ -1,0 +1,16 @@
+{
+  "name": "complaintportal",
+  "version": "1.0.0",
+  "description": "Helps Citizen of a Countary to register complaints",
+  "license": "ISC",
+  "author": "Devesh",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1"
+  }
+}

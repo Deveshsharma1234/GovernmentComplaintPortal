@@ -1,5 +1,5 @@
 show databases;
--- drop database MunicipalComplaint; 
+-- drop database Municipal_Complaint; 
 create database Municipal_Complaint;
  use Municipal_Complaint;
 CREATE TABLE Roles (
@@ -11,26 +11,33 @@ CREATE TABLE Roles (
     activeState BOOLEAN DEFAULT TRUE
 );
 
+ALTER TABLE Roles MODIFY Role VARCHAR(30) NOT NULL;
+
+
 CREATE TABLE Users (
     UserId INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(10) NOT NULL,
     MiddleName VARCHAR(10),
     LastName VARCHAR(10) NOT NULL,
     Email VARCHAR(100) NOT NULL,
+  
     Phone VARCHAR(10) NOT NULL,
     Address VARCHAR(50),
     Pincode VARCHAR(7),
-    State VARCHAR(10) NOT NULL,
+    State VARCHAR(50) NOT NULL,
     District VARCHAR(20) NOT NULL,
     City VARCHAR(20) NOT NULL,
     IsRegistered BOOLEAN DEFAULT TRUE,
     CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     ModifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    ActiveState BOOLEAN DEFAULT TRUE,
+    ActiveState BOOLEAN DEFAULT TRUE,	
     ModifiedBy VARCHAR(20),
     RoleId INT,
     FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
 );
+ALTER TABLE Users
+ADD COLUMN Password VARCHAR(200) NOT NULL;
+
 
 
 CREATE TABLE States (
