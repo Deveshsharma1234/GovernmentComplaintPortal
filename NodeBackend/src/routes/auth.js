@@ -6,6 +6,7 @@ const CryptoJS = require('crypto-js'); // Import crypto-js
 const db = require('../config/db');
 
 //dont req authorization
+//simple citize register 
 authRouter.post("/citizen-register",  (req, res) => {
     try {
         const { FirstName, LastName, Email, Phone, Address, Pincode, State, District, City, Password } = req.body;
@@ -44,6 +45,46 @@ authRouter.post("/citizen-register",  (req, res) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
 
+    }
+})
+
+
+// Registeration of Gov. Employe, Gove Representative only by admin,
+
+authRouter.post("/admin/register",(req,res)=>{
+    try {
+        const {FirstName, LastName, Email, Phone, Address, Pincode, State, District, City,RoleId, Password} = req.body;
+        validateRegister(req);
+          const hashedPassword = CryptoJS.SHA256(Password).toString(CryptoJS.enc.Base64);
+          const query = `insert into users (FirstName,LastName,Email,Phone,Address,Pincode,State,District,City,RoleId,Password) values(?,?,?,?,?,?,?,?,?,?,?)`;
+            db.pool.execute(query, [FirstName, LastName, Email, Phone, Address, Pincode, State, District, City, RoleId, hashedPassword], (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            } else {
+                const savedUser = {
+                    id: result.insertId,
+                    FirstName,
+                    LastName,
+                    Email,
+                    Phone,
+                    Address,
+                    Pincode,
+                    State,
+                    District,
+                    City,
+                    RoleId : RoleId ==3 ? "Government Employee" : "Government Representative"
+                };
+                res.json({
+                    message: "User Created Succesfull",
+                    savedUser: savedUser
+                })
+            }
+        })
+
+        
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+        
     }
 })
 
