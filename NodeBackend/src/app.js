@@ -1,17 +1,21 @@
 
 const express = require('express');
 const {connectDB} =require('./config/db')
-
+const authRouter = require('./routes/auth');
 const app = express();
 
 
-connectDB().then(()=>{
-    app.listen(4000,()=>{
-        console.log("Server started on port 4000.");
-    })
-}).catch((err)=>{
-    console.error('❌ Failed to start server due to DB connection failure');
-    process.exit(1); // optional: stop the process
-})
+app.use(express.json());
 
+
+app.use("/",authRouter)
+
+
+// Directly call connectDB without promises
+connectDB(); 
+
+// Start your server
+app.listen(4000, () => {
+    console.log("Server started on port 4000.");
+});
 
