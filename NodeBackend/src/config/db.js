@@ -1,4 +1,4 @@
- const mysql = require("mysql2/promise")
+ const mysql = require("mysql2")
 
  const pool = mysql.createPool(
     {
@@ -17,15 +17,17 @@
     }
  )
 
- const connectDB = async () => {
-    try {
-      const connection = await pool.getConnection();
-      console.log('✅ Database connected successfully!');
-      connection.release(); // Always release to pool
-    } catch (err) {
-      console.error('❌ Database connection failed:', err.message);
-      throw err;
-    }
-  };
+ const connectDB = () => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('❌ Database connection failed:', err.message);
+            throw err;
+        } else {
+            console.log('✅ Database connected successfully!');
+            connection.release();
+        }
+    });
+};
+
 
  module.exports = {pool,connectDB};
