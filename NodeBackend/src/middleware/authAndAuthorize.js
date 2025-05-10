@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 //Role Id  =4 for Citizens
 const authAndAuthorize = (...allowedRoles) => {
     return (req, res, next) => {
-        console.log(req.cookies);
+        // console.log(req.cookies);
         const token = req.cookies?.token;
 
         if (!token) {
@@ -16,7 +16,7 @@ const authAndAuthorize = (...allowedRoles) => {
 
         try {
             const decoded = jwt.verify(token, "@secretKey"); 
-            console.log(decoded);
+            // console.log(decoded);
             req.user = decoded;
 
             if (!allowedRoles.includes(decoded.RoleId)) {
