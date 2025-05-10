@@ -17,6 +17,12 @@ app.use("/",authRouter,userRouter)
 // Directly call connectDB without promises
 connectDB(); 
 
+//For checking the node server status
+app.get("/health",(req,res)=>{
+    res.send("Node Server is Running");
+});
+
+
 // Start your server
 app.listen(4000, () => {
     console.log("Server started on port 4000.");
