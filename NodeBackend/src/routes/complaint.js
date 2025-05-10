@@ -7,7 +7,7 @@ complaintRouter.get("/api/complaint-types",(req,res)=>{
         const queryText = `SELECT ComplaintTypeID,ComplaintType,Description FROM complainttype`;
 
         db.pool.execute(queryText, (err, result) => {
-            if(error == null){
+            if(err == null){
                 res.send(result);
             }
             else{
@@ -22,10 +22,10 @@ complaintRouter.get("/api/complaint-types",(req,res)=>{
 });
 complaintRouter.get("/api/statuses",(req,res)=>{
     try{
-        const queryText = `SELECT ComplaintTypeID,ComplaintType,Description FROM complainttype`;
+        const queryText = `SELECT StatusID,Status FROM complaintstatus`;
 
         db.pool.execute(queryText, (err, result) => {
-            if(error == null){
+            if(err == null){
                 res.send(result);
             }
             else{
