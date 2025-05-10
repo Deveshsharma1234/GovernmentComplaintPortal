@@ -94,7 +94,7 @@ authRouter.post("/admin/register", authAndAuthorize(1),(req, res) => {
 authRouter.post("/login", (req, res) => {
     try {
         const { Email, Password } = req.body;
-        console.log(req.body);
+       
 
         const statement = `select  UserId,FirstName,LastName,Email,Phone,Address,Pincode,State,District,City,RoleId from users where Email = ? and Password = ?`;
         const hashedPassword = CryptoJS.SHA256(Password).toString(CryptoJS.enc.Base64);
@@ -103,7 +103,7 @@ authRouter.post("/login", (req, res) => {
             if (users.length == 0) res.status(400).json({ message: "Invalid Credentials" })
             else {
                 const user = users[0];
-                console.log(user);
+              
                 const payload = {
                     UserId: user.UserId,
                     Role: user.RoleId == 3 ? "Government Employee" : "Government Representative",
