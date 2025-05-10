@@ -44,21 +44,19 @@ userRouter.get("/user/:UserId", authAndAuthorize(1, 2, 3), (req, res) => {
 })
 
 // get users  profile
-userRouter.get("/user/profile", authAndAuthorize(1, 2, 3, 4),(req,res)=>{
+userRouter.get("/getProfile", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-        const UserId = req.user.UserId;
-        console.log(UserId);
-        console.log("req.user:", req.user);
-
-        
-        
-        
+          
+        const User = req.user; 
+        res.json({
+            message: "User profile retrieved",
+            user: User
+           
+        });
     } catch (error) {
-        res.status(400).json({error:error.message})
-        
+        res.status(400).json({ error: error.message });
     }
-
-})
+});
 
 
 module.exports = userRouter;
