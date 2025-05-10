@@ -94,10 +94,10 @@ authRouter.post("/login", (req, res) => {
     try {
         const { Email, Password } = req.body;
         console.log(req.body);
-        
+
         const statement = `select  UserId,FirstName,LastName,Email,Phone,Address,Pincode,State,District,City,RoleId from users where Email = ? and Password = ?`;
         const hashedPassword = CryptoJS.SHA256(Password).toString(CryptoJS.enc.Base64);
-        db.pool.execute(statement, [Email, hashedPassword], (err, users) => {
+        db.pool.query(statement, [Email, hashedPassword], (err, users) => {
             if (err) res.status(400).json({ message: err.message })
             if (users.length == 0) res.status(400).json({ message: "Invalid Credentials" })
             else {
@@ -133,6 +133,30 @@ authRouter.post("/login", (req, res) => {
 
     }
 })
+
+authRouter.post("/logout", (req, res) => {
+
+    try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: false, // 🔐 Set to true in production (with HTTPS)
+            sameSite: "lax", // or "none" only if cross-site & over HTTPS
+            path: "/" // ✅ VERY important to match cookie path
+
+        })
+        console.log("cleared Cookies");
+        res.json({
+            ok : true,
+            message: "Logged Out"
+        })
+        
+
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+
+    }
+})
+
 
 
 
