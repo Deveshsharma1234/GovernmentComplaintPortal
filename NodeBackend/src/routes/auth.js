@@ -4,6 +4,7 @@ const { validateRegister } = require('../utils/validateRegister');
 const CryptoJS = require('crypto-js'); // Import crypto-js
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const authAndAuthorize = require('../middleware/authAndAuthorize');
 
 //dont req authorization
 //simple citize register 
@@ -51,7 +52,7 @@ authRouter.post("/citizen-register", (req, res) => {
 
 // Registeration of Gov. Employe, Gove Representative only by admin,
 
-authRouter.post("/admin/register", (req, res) => {
+authRouter.post("/admin/register", authAndAuthorize(1),(req, res) => {
     try {
         const { FirstName, LastName, Email, Phone, Address, Pincode, State, District, City, RoleId, Password } = req.body;
         validateRegister(req);
