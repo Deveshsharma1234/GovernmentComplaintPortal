@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const {connectDB} =require('./config/db')
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
+const complaintRouter = require('./routes/complaint');
 const app = express();
 
 
@@ -12,7 +13,7 @@ app.use(cookieParser())
 
 
 app.use("/",authRouter,userRouter)
-
+app.use("/",complaintRouter);
 
 // Directly call connectDB without promises
 connectDB(); 
