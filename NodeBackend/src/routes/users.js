@@ -58,5 +58,79 @@ userRouter.get("/getProfile", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     }
 });
 
+userRouter.patch("/user", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+    try {
+        const user = req.user;
+        const {
+            FirstName,
+            LastName,
+            Phone,
+            Address,
+            Pincode,
+            State,
+            District,
+            City
+        } = req.body;
+
+        const ModifiedDate = new Date();
+        let ModifiedBy;
+        if(user.RoleId==1)  ModifiedBy = "Admin";
+        if(user.RoleId==2)  ModifiedBy = "Government Representative";
+        if(user.RoleId==3)  ModifiedBy = "Government emp "
+        if(user.RoleId==4)  ModifiedBy = "Citizen";
+        else{
+            ModifiedBy = "SYSTEM"
+        }
+
+        const updateQuery = `
+            UPDATE users SET
+                FirstName = ?,
+                LastName = ?,
+                Phone = ?,
+                Address = ?,
+                Pincode = ?,
+                State = ?,
+                District = ?,
+                City = ?,
+                ModifiedDate = ?,
+                ModifiedBy = ?
+            WHERE UserId = ?
+        `;
+
+        const values = [
+            FirstName,
+            LastName,
+            Phone,
+            Address,
+            Pincode,
+            State,
+            District,
+            City,
+            ModifiedDate,
+            ModifiedBy,
+            user.UserId
+        ];
+
+        db.pool.execute(updateQuery, values, (err, result) => {
+            if (err) return res.status(400).json({ error: err.message });
+
+            // Now fetch the updated user
+            db.pool.execute(`SELECT UserId, FirstName, LastName, Email, Phone, Address, Pincode, State, District, City, RoleId, ModifiedDate, ModifiedBy FROM users WHERE UserId = ?`, 
+            [user.UserId], 
+            (err2, rows) => {
+                if (err2) return res.status(500).json({ error: err2.message });
+
+                res.json({
+                    message: "User profile updated successfully",
+                    updatedUser: rows[0]
+                });
+            });
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 module.exports = userRouter;
