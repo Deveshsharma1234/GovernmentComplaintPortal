@@ -23,5 +23,23 @@ districtRouter.get("/getAllDistricts",authAndAuthorize(1,2,3,4),(req,res)=>{
     }
 })
 
+districtRouter.get("/district/:stateId",authAndAuthorize(1,2,3,4),(req,res)=>{
+    try {
+        const {stateId} = req.params;
+        const statement = `select * from districts where stateID =?`;
+        db.pool.query(statement,[stateId],(error,result)=>{
+            if(error) res.status(400).json({error: error.message});
+            res.json({
+                districts: result
+                })
+        })
+
+        
+    } catch (error) {
+        res.status(400).json({
+            message:error.message
+        })
+    }
+})
 
 module.exports =  districtRouter ;
