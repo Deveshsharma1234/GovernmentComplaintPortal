@@ -7,6 +7,8 @@ const userRouter = require('./routes/users');
 const complaintRouter = require('./routes/complaint');
 const stateRouter = require('./routes/state')
 const districtRouter = require('./routes/district')
+const citiesRouter = require('./routes/cities')
+const wardsRouter = require('./routes/wards')
 const app = express();
 
 
@@ -14,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser())
 
 
-app.use("/",authRouter,userRouter,stateRouter,districtRouter)
+app.use("/",authRouter,userRouter,stateRouter,districtRouter,citiesRouter,wardsRouter)
 app.use("/",complaintRouter);
 
 // Directly call connectDB without promises
