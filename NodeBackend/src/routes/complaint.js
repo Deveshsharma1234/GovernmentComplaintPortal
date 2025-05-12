@@ -5,8 +5,8 @@ const authAndAuthorize = require('../middleware/authAndAuthorize');
 
 
 
-// /api/complaints	                    Get all complaints
-complaintRouter.get("/api/compalaints", authAndAuthorize(1, 2, 3), (req, res) => {
+// /complaints	                    Get all complaints
+complaintRouter.get("/complaints", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
         const queryText = `SELECT ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus FROM complaints`;
         db.pool.execute(queryText, (err, result) => {
@@ -24,8 +24,8 @@ complaintRouter.get("/api/compalaints", authAndAuthorize(1, 2, 3), (req, res) =>
     }
 });
 
-// /api/complaints/{id}	                Get complaint by ID
-complaintRouter.get("/api/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// /complaints/{id}	                Get complaint by ID
+complaintRouter.get("/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const id = req.params.id; // Extract the ID from request parameters
         const queryText = `SELECT ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus FROM complaints WHERE ComplaintID = ?`;
@@ -45,14 +45,14 @@ complaintRouter.get("/api/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, r
     }
 });
 
-// /api/complaints	                    Register a new complaint
-complaintRouter.post("/api/complaints", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// /complaints	                    Register a new complaint
+complaintRouter.post("/complaints", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const { ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus } = req.body;
         const queryText = `INSERT INTO complaints(ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
         db.pool.execute(queryText, [ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus], (err, result) => {
-            if (error == null) {
+            if (err == null) {
                 console.log(result);
                 res.status(201).json({ message: "complaint registered sucessfully" });
             }
@@ -68,8 +68,8 @@ complaintRouter.post("/api/complaints", authAndAuthorize(1, 2, 3, 4), (req, res)
     }
 });
 
-// /api/complaints/{id}	                Update a complaint (e.g., status)
-complaintRouter.put("/api/complaints/:id", authAndAuthorize(1, 2, 3), (req, res) => {
+// /complaints/{id}	                Update a complaint (e.g., status)
+complaintRouter.put("/complaints/:id", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
         const id = req.params.id; // Extract the ID from request parameters
         const { Status } = req.body;
@@ -93,13 +93,18 @@ complaintRouter.put("/api/complaints/:id", authAndAuthorize(1, 2, 3), (req, res)
 });
 
 
-// // /api/complaints/{id}	            Soft-delete (mark inactive)
-complaintRouter.delete("/api/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// // /complaints	            Soft-delete (mark inactive)
+complaintRouter.delete("/complaints/", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-        const id = req.params.id; // Extract the ID from request parameters
-        const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
-        db.pool.execute(queryText, [id], (err, result) => {
-            if (error == null) {
+        // const id = req.params.id; // Extract the ID from request parameters
+        // const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
+        
+        
+        const UserID = req.user.UserID;
+        // updating complaint status to 4 i.e Invalid for particular user id 
+        const queryText = `UPDATE complaints SET Status = 4 WHERE UserID = `;
+        db.pool.execute(queryText, [UserID], (err, result) => {
+            if (err == null) {
                 if (result.affectedRows > 0) {
                     res.status(200).json({ message: "Deleted Successfully" });
                 } else {
@@ -115,8 +120,8 @@ complaintRouter.delete("/api/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req
     }
 });
 
-// /api/complaints/user/{userId}	    Get complaints by user
-complaintRouter.get("/api/complaints/user/:userId", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// /complaints/user/{userId}	    Get complaints by user
+complaintRouter.get("/complaints/user/:userId", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const userId = req.params.userId;
         const queryText = `SELECT 
@@ -139,8 +144,8 @@ complaintRouter.get("/api/complaints/user/:userId", authAndAuthorize(1, 2, 3, 4)
     }
 });
 
-// /api/complaints/status/{statusId}	Filter by status
-complaintRouter.get("/api/complaints/status/:statusId", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// /complaints/status/{statusId}	Filter by status
+complaintRouter.get("/complaints/status/:statusId", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const statusId = req.params.statusId;
         const queryText = `SELECT 
