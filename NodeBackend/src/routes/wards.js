@@ -11,7 +11,7 @@ wardsRouter.get("/wards",authAndAuthorize(1,2,3,4),(req,res)=>{
          const queryText = `SELECT WardID, City, CityID, AreaCovered, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus
         FROM wards`;
         db.pool.execute(queryText,(err,result)=>{
-            if(err = null){
+            if(err == null){
                 res.json({wards:result});
             }
             else{
@@ -31,7 +31,7 @@ wardsRouter.get("/wards/:cityId",authAndAuthorize(1,2,3,4),(req,res)=>{
         WHERE CityID = ?`;
         const CityID = req.params.districtId;
         db.pool.execute(queryText,[CityID],(err,result)=>{
-            if(err = null){
+            if(err == null){
                 res.json({wards:result});
             }
             else{
