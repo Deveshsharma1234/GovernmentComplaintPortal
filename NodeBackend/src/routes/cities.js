@@ -10,7 +10,7 @@ citiesRouter.get("/cities",authAndAuthorize(1,2,3,4),(req,res)=>{
          const queryText = `SELECT CityID, City, DistrictID, StateID, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus 
         FROM cities`;
         db.pool.execute(queryText,(err,result)=>{
-            if(err = null){
+            if(err == null){
                 res.json({cities:result});
             }
             else{
@@ -30,7 +30,7 @@ citiesRouter.get("/cities/:districtId",authAndAuthorize(1,2,3,4),(req,res)=>{
         WHERE DistrictID = ?`;
         const DistrictID = req.params.districtId;
         db.pool.execute(queryText,[DistrictID],(err,result)=>{
-            if(err = null){
+            if(err == null){
                 res.json({cities:result});
             }
             else{
