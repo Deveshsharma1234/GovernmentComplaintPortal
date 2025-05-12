@@ -52,7 +52,7 @@ complaintRouter.post("/complaints", authAndAuthorize(1, 2, 3, 4), (req, res) => 
         const queryText = `INSERT INTO complaints(ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
         db.pool.execute(queryText, [ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus], (err, result) => {
-            if (error == null) {
+            if (err == null) {
                 console.log(result);
                 res.status(201).json({ message: "complaint registered sucessfully" });
             }
@@ -93,13 +93,18 @@ complaintRouter.put("/complaints/:id", authAndAuthorize(1, 2, 3), (req, res) => 
 });
 
 
-// // /complaints/{id}	            Soft-delete (mark inactive)
-complaintRouter.delete("/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// // /complaints	            Soft-delete (mark inactive)
+complaintRouter.delete("/complaints/", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-        const id = req.params.id; // Extract the ID from request parameters
-        const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
-        db.pool.execute(queryText, [id], (err, result) => {
-            if (error == null) {
+        // const id = req.params.id; // Extract the ID from request parameters
+        // const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
+        
+        
+        const UserID = req.user.UserID;
+        // updating complaint status to 4 i.e Invalid for particular user id 
+        const queryText = `UPDATE complaints SET Status = 4 WHERE UserID = `;
+        db.pool.execute(queryText, [UserID], (err, result) => {
+            if (err == null) {
                 if (result.affectedRows > 0) {
                     res.status(200).json({ message: "Deleted Successfully" });
                 } else {
