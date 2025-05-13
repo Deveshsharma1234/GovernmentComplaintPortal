@@ -1,8 +1,39 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import useSignInWithEmailAndPassword from "../hooks/useSignInWithEmailAndPassword"
+
+
+
+
+
+
 
 const Login = () => {
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate();
+  const login = useSignInWithEmailAndPassword();
+
+  const handleLogin = ()=>{
+
+    login(emailRef, passwordRef,navigate);
+
+  }
+
+
+
+
+
+
+
+
+
+
   return (
+    <>
+     <ToastContainer/>
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 flex items-center justify-center px-4">
       <div className="relative w-full max-w-md">
         {/* Background gradient skew card */}
@@ -16,6 +47,7 @@ const Login = () => {
             {/* Email */}
             <div className="relative">
               <input
+              ref={emailRef}
                 id="email"
                 name="email"
                 type="text"
@@ -33,6 +65,7 @@ const Login = () => {
             {/* Password */}
             <div className="relative">
               <input
+              ref={passwordRef}
                 autoComplete="off"
                 id="password"
                 name="password"
@@ -51,6 +84,7 @@ const Login = () => {
             {/* Submit Button */}
             <div>
               <button
+              onClick={handleLogin}
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-300"
               >
@@ -66,6 +100,7 @@ const Login = () => {
       </div>
        
     </div>
+    </>
   );
 };
 
