@@ -10,6 +10,7 @@ const authAndAuthorize = (...allowedRoles) => {
     return async (req, res, next) => {
         // console.log(req.cookies);
         const token = req.cookies?.token;
+        console.log("Token:", token);
 
         if (!token) {
             return res.status(401).json({ message: "Unauthorized: Token not found" });

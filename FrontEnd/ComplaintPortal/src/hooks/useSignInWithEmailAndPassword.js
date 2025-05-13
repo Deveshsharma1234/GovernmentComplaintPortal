@@ -56,8 +56,8 @@ const useSignInWithEmailAndPassword = () => {
                 toast.error(loggedInUser.error, { theme: "dark" });
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error.message, { theme: "dark" });
+            console.log(error.messate);
+            toast.error("😓 Website is down ..\nPlease try again later", { theme: "dark" });
         }
     }, [dispatch]);
 
