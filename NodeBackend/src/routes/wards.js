@@ -6,7 +6,7 @@ const authAndAuthorize = require('../middleware/authAndAuthorize');
 
 
 // /wards	                    Get all wards
-wardsRouter.get("/wards",authAndAuthorize(1,2,3,4),(req,res)=>{
+wardsRouter.get("/wards",(req,res)=>{
     try {
          const queryText = `SELECT WardID, City, CityID, AreaCovered, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus
         FROM wards`;
@@ -29,7 +29,7 @@ wardsRouter.get("/wards/:cityId",(req,res)=>{
         const queryText = `SELECT WardID, City, CityID, AreaCovered, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus
         FROM wards
         WHERE CityID = ?`;
-        const CityID = req.params.districtId;
+        const CityID = req.params.cityId;
         db.pool.execute(queryText,[CityID],(err,result)=>{
             if(err == null){
                 res.json({wards:result});
