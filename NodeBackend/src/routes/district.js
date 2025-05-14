@@ -23,7 +23,7 @@ districtRouter.get("/getAllDistricts",authAndAuthorize(1,2,3,4),(req,res)=>{
     }
 })
 
-districtRouter.get("/district/:stateId",authAndAuthorize(1,2,3,4),(req,res)=>{
+districtRouter.get("/district/:stateId",(req,res)=>{
     try {
         const {stateId} = req.params;
         const statement = `select * from districts where stateID =?`;

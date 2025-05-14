@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../utils/constants';
+import useLocationData from '../hooks/useLocationData';
+import useRegisterCitizen from '../hooks/useRegisterCitizen';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { Link, useNavigate } from 'react-router';
 
 const Register = () => {
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [cities, setCities] = useState([]);
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     FirstName: '',
@@ -19,41 +21,8 @@ const Register = () => {
     City: '',
     Password: ''
   });
-
-  // Fetch all states on component mount
-  useEffect(() => {
-    axios.get(BASE_URL+"/getAllStates",
-        {
-            withCredentials: true,
-        
-        }
-       
-    )
-      .then(res => setStates(res.data.states))
-      .catch(err => console.error(err));
-  }, []);
-
-  // Fetch districts when a state is selected
-  useEffect(() => {
-    if (formData.State) {
-      axios.get(`/api/districts?state=${formData.State}`)
-        .then(res => setDistricts(res.data))
-        .catch(err => console.error(err));
-    } else {
-      setDistricts([]);
-    }
-  }, [formData.State]);
-
-  // Fetch cities when a district is selected
-  useEffect(() => {
-    if (formData.District) {
-      axios.get(`/api/cities?district=${formData.District}`)
-        .then(res => setCities(res.data))
-        .catch(err => console.error(err));
-    } else {
-      setCities([]);
-    }
-  }, [formData.District]);
+  const { states, districts, cities } = useLocationData(formData.State, formData.District);
+  const registerCitizen = useRegisterCitizen();
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -62,70 +31,195 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post('/api/register', formData)
-      .then(res => {
-        alert("User registered successfully!");
-        // Optionally, clear form or redirect
-      })
-      .catch(err => console.error(err));
-  };
 
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const data = await registerCitizen(formData);
+
+    if (data?.message === "User Created Succesfull") {
+      toast.success("Registration successful!");
+      setTimeout(() => {
+        navigate("/login")
+        
+      }, 5000);
+     
+    } else {
+      toast.error("Registration failed. " + (data?.message || "Unknown error."));
+    }
+  } catch (err) {
+    console.error("Registration failed:", err);
+    const errorMsg = err?.response?.data?.message || err.message || "Unknown error occurred.";
+    toast.error("Registration failed. " + errorMsg);
+  }
+};
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
+   <div className="min-h-screen  flex   justify-center items-center bg-gray-100 py-10">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
+      
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-96">
+        <h1 className="text-2xl text-purple-600 font-semibold text-center mb-6">Register</h1>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="FirstName">First Name</label>
+              <input
+                type="text"
+                name="FirstName"
+                value={formData.FirstName}
+                onChange={handleChange}
+                required
+                className=" text-black w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="firstName">First Name:</label>
-        <input type="text" name="FirstName" value={formData.FirstName} onChange={handleChange} required />
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="LastName">Last Name</label>
+              <input
+                type="text"
+                name="LastName"
+                value={formData.LastName}
+                onChange={handleChange}
+                required
+                className=" text-black w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="lastName">Last Name:</label>
-        <input type="text" name="LastName" value={formData.LastName} onChange={handleChange} required />
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="Email">Email</label>
+              <input
+                type="email"
+                name="Email"
+                value={formData.Email}
+                onChange={handleChange}
+                required
+                className="w-full text-black mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="Email">Email:</label>
-        <input type="email" name="Email" value={formData.Email} onChange={handleChange} required />
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="Phone">Phone</label>
+              <input
+                type="text"
+                name="Phone"
+                value={formData.Phone}
+                onChange={handleChange}
+                required
+                className="w-full text-black mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="Phone">Phone:</label>
-        <input type="text" name="Phone" value={formData.Phone} onChange={handleChange} required />
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="Address">Address</label>
+              <input
+                type="text"
+                name="Address"
+                value={formData.Address}
+                onChange={handleChange}
+                required
+                className="w-full text-black mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="Address">Address:</label>
-        <input type="text" name="Address" value={formData.Address} onChange={handleChange} required />
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="Pincode">Pincode</label>
+              <input
+                type="text"
+                name="Pincode"
+                value={formData.Pincode}
+                onChange={handleChange}
+                required
+                className="w-full text-black mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="Pincode">Pincode:</label>
-        <input type="text" name="Pincode" value={formData.Pincode} onChange={handleChange} required />
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="State">State</label>
+              <select
+                name="State"
+                value={formData.State}
+                onChange={handleChange}
+                required
+                className="w-full text-black  mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              >
+                <option value="">Select State</option>
+                {states.map(state => (
+                  <option key={state.StateId} value={state.State}>{state.State}</option>
+                ))}
+              </select>
+            </div>
 
-        <label htmlFor="State">State:</label>
-        <select name="State" value={formData.State} onChange={handleChange} required>
-          <option value="">Select State</option>
-          {states.map(state => (
-            <option key={state.StateId} value={state.State}>{state.State}</option>
-            
-            
-          ))}
-        </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="District">District</label>
+              <select
+                name="District"
+                value={formData.District}
+                onChange={handleChange}
+                required
+                disabled={!districts.length}
+                className="w-full text-black  mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              >
+                <option value="">Select District</option>
+                {districts.map(district => (
+                  <option key={district.DistrictID} value={district.District}>{district.District}</option>
+                ))}
+              </select>
+            </div>
 
-        <label htmlFor="District">District:</label>
-        <select name="District" value={formData.District} onChange={handleChange} required disabled={!districts.length}>
-          <option value="">Select District</option>
-          {districts.map(district => (
-            <option key={district.id} value={district.name}>{district.name}</option>
-          ))}
-        </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="City">City</label>
+              <select
+                name="City"
+                value={formData.City}
+                onChange={handleChange}
+                required
+                disabled={!cities.length}
+                className="w-full  text-black mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              >
+                <option value="">Select City</option>
+                {cities.map(city => (
+                  <option key={city.CityID} value={city.City}>{city.City}</option>
+                ))}
+              </select>
+            </div>
 
-        <label htmlFor="City">City:</label>
-        <select name="City" value={formData.City} onChange={handleChange} required disabled={!cities.length}>
-          <option value="">Select City</option>
-          {cities.map(city => (
-            <option key={city.id} value={city.name}>{city.name}</option>
-          ))}
-        </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="Password">Password</label>
+              <input
+                type="password"
+                name="Password"
+                value={formData.Password}
+                onChange={handleChange}
+                required
+                className="w-full text-black mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </div>
 
-        <label htmlFor="Password">Password:</label>
-        <input type="password" name="Password" value={formData.Password} onChange={handleChange} required />
-
-        <button type="submit">Register</button>
-      </form>
+            <button
+              type="submit"
+              className="w-full py-2 mt-4 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none"
+            >
+              Register
+            </button>
+          </div>
+           <h3 className="text-black text-center text-sm sm:text-base">
+              Alredy Registered? <Link to="/login" className="text-purple-500 hover:underline">Login here</Link>
+            </h3>
+        </form>
+      </div>
     </div>
   );
 };
