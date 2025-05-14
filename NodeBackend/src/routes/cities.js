@@ -5,7 +5,7 @@ const authAndAuthorize = require('../middleware/authAndAuthorize');
 
 
 // /cities	Get all cities
-citiesRouter.get("/cities",authAndAuthorize(1,2,3,4),(req,res)=>{
+citiesRouter.get("/cities",(req,res)=>{
     try {
          const queryText = `SELECT CityID, City, DistrictID, StateID, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus 
         FROM cities`;
@@ -23,7 +23,7 @@ citiesRouter.get("/cities",authAndAuthorize(1,2,3,4),(req,res)=>{
 });
 
 // /cities/:districtId	Get cities by district ID
-citiesRouter.get("/cities/:districtId",authAndAuthorize(1,2,3,4),(req,res)=>{
+citiesRouter.get("/cities/:districtId",(req,res)=>{
     try {
         const queryText = `SELECT CityID, City, DistrictID, StateID, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus 
         FROM cities 

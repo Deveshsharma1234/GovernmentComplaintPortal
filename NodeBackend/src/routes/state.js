@@ -3,7 +3,7 @@ const stateRouter = express.Router();
 const db = require('../config/db');
 const authAndAuthorize = require('../middleware/authAndAuthorize')
 
-stateRouter.get("/getAllStates",authAndAuthorize(1,2,3,4),(req,res)=>{
+stateRouter.get("/getAllStates",(req,res)=>{
     try {
         const statement = 'select * from states';
         db.pool.query(statement,(err,result)=>{

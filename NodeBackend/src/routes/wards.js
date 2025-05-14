@@ -24,7 +24,7 @@ wardsRouter.get("/wards",authAndAuthorize(1,2,3,4),(req,res)=>{
 });
 
 // /wards/cityId={}	            Get wards by city ID
-wardsRouter.get("/wards/:cityId",authAndAuthorize(1,2,3,4),(req,res)=>{
+wardsRouter.get("/wards/:cityId",(req,res)=>{
     try {
         const queryText = `SELECT WardID, City, CityID, AreaCovered, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus
         FROM wards
