@@ -5,7 +5,7 @@ const authAndAuthorize = require('../middleware/authAndAuthorize');
 
 const districtRouter = express.Router();
 
-districtRouter.get("/getAllDistricts",authAndAuthorize(1,2,3,4),(req,res)=>{
+districtRouter.get("/getAllDistricts",(req,res)=>{
     try {
         const statement = `SELECT * FROM districts`
         db.pool.query(statement,(err,result)=>{
