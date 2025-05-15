@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
 import useSignInWithEmailAndPassword from "../hooks/useSignInWithEmailAndPassword"
+import { useSelector } from "react-redux";
+
 
 
 
@@ -11,9 +13,18 @@ import useSignInWithEmailAndPassword from "../hooks/useSignInWithEmailAndPasswor
 
 const Login = () => {
 
+
+  const isLoggedIn  = useSelector(store=> store.user.isLoggedIn)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
+
   const emailRef = useRef();
   const passwordRef = useRef();
-  const navigate = useNavigate();
   const login = useSignInWithEmailAndPassword();
 
   const handleLogin = () => {

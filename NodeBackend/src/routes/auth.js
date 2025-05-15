@@ -101,7 +101,7 @@ authRouter.post("/login", (req, res) => {
         db.pool.query(statement, [Email, hashedPassword], (err, users) => {
             if (err) res.status(400).json({ message: err.message })
 
-            if (users.length == 0) res.status(400).json({ message: "Invalid Credentials" })
+            if (users.length == 0) res.status(404).json({ message: "Invalid Credentials" })
             else {
                 const user = users[0];
                 if (user.ActiveState == 0) {

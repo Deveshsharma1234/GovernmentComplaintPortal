@@ -23,21 +23,26 @@ const useSignInWithEmailAndPassword = () => {
                 return;
             }
 
-            let loggedInUser = await fetch(BASE_URL + "/login", {
+            let response = await fetch(BASE_URL + "/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ Email, Password }),
                 credentials: "include"
             });
+            const data = await response.json();
+            console.log(data + "  from login");
+            if (!response.ok) {
+                toast.error(data.message || "Login failed", { theme: "dark" });
+                return;
+            }
 
-            loggedInUser = await loggedInUser.json();
 
-            if (loggedInUser.error === undefined) {
+            if (data.user) {
                 //just for testing purpose
                 localStorage.setItem("email", Email);
                 localStorage.setItem("password", Password);
                 //for redux store
-                dispatch(addUser(loggedInUser.user));
+                dispatch(addUser(data.user));
                 toast('🦄 Wow Logged in', {
                     position: "top-right",
                     autoClose: 5000,
