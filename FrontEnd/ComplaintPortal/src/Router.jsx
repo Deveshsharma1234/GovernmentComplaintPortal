@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Profile from "./pages/profile";
 import EditProflile from "./components/EditProfile"
+import GetMyComplaints from "./components/GetMyComplaints";
+import RegisterComplaint from "./pages/RegisterComplaint";
 
 
 
@@ -33,8 +35,15 @@ const appRouter = createBrowserRouter([
                 path: "/profile",
                 element: <Profile/>
             },{
-                path: "edit-profile",
+                path: "/edit-profile",
                 element: <EditProflile/>
+            },{
+                path: "/getMyComplaints",
+                element: <GetMyComplaints/>
+            },
+            {
+                path: "/registerComplaints",
+                element: <RegisterComplaint/>
             }
 
         ]

@@ -29,7 +29,7 @@ wardsRouter.get("/wards/:cityId",(req,res)=>{
         const queryText = `SELECT WardID, City, CityID, AreaCovered, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus
         FROM wards
         WHERE CityID = ?`;
-        const CityID = req.params.districtId;
+        const CityID = req.params.cityId;
         db.pool.execute(queryText,[CityID],(err,result)=>{
             if(err == null){
                 res.json({wards:result});

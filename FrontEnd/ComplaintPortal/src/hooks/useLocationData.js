@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 
-const useLocationData = (selectedState, selectedDistrict) => {
+const useLocationData = (selectedState, selectedDistrict,selectedCity) => {
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [cities, setCities] = useState([]);
+   const [wards, setWards] = useState([]);
 
   // Fetch all states
   useEffect(() => {
@@ -60,7 +61,27 @@ const useLocationData = (selectedState, selectedDistrict) => {
     }
   }, [selectedDistrict, districts]);
 
-  return { states, districts, cities };
+   // Fetch wards when city changes
+  useEffect(() => {
+    if (selectedCity) {
+      const cityObj = cities.find(c => c.City === selectedCity);
+      if (cityObj) {
+        axios.get(`${BASE_URL}/wards/${cityObj.CityID}`, { withCredentials: true })
+          .then(res => {
+            const wardData = res.data?.wards || [];
+            setWards(wardData);
+          })
+          .catch(err => {
+            console.error('Failed to fetch wards:', err);
+            setWards([]);
+          });
+      }
+    } else {
+      setWards([]);
+    }
+  }, [selectedCity, cities]);
+
+  return { states, districts, cities,wards  };
 };
 
 export default useLocationData;

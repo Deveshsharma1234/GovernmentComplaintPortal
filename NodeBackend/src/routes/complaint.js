@@ -2,16 +2,19 @@ const express = require('express');
 const complaintRouter = express.Router();
 const db = require('../config/db');
 const authAndAuthorize = require('../middleware/authAndAuthorize');
+const upload=  require('../middleware/uploadConfig')
 
 
 
 // /complaints	                    Get all complaints
-complaintRouter.get("/complaints", authAndAuthorize(1, 2, 3), (req, res) => {
+complaintRouter.get("/complaints", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const queryText = `SELECT ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus FROM complaints`;
         db.pool.execute(queryText, (err, result) => {
             if (err == null) {
-                res.send(result);
+                res.json({
+                    complaints: result
+                });
             }
             else {
                 console.log("SQL Error\n", err);
@@ -24,14 +27,16 @@ complaintRouter.get("/complaints", authAndAuthorize(1, 2, 3), (req, res) => {
     }
 });
 
-// /complaints/{id}	                Get complaint by ID
-complaintRouter.get("/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+// /myComplaintsdmi             Get All my complaint
+complaintRouter.get("/myComplaints", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-        const id = req.params.id; // Extract the ID from request parameters
-        const queryText = `SELECT ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus FROM complaints WHERE ComplaintID = ?`;
+        const id = req.user.UserId; // Extract the ID from request parameters
+        const queryText = `SELECT ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus FROM complaints WHERE UserId = ?`;
         db.pool.execute(queryText, [id], (err, result) => {
             if (err == null) {
-                res.send(result);
+                res.json({
+                    complaints: result
+                });
             }
             else {
                 console.log("SQL Error\n", err);
@@ -46,30 +51,80 @@ complaintRouter.get("/complaints/:id", authAndAuthorize(1, 2, 3, 4), (req, res) 
 });
 
 // /complaints	                    Register a new complaint
-complaintRouter.post("/complaints", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+complaintRouter.post("/complaints", upload.fields([
+    { name: 'Image1', maxCount: 1 },
+    { name: 'Image2', maxCount: 1 },
+    { name: 'Image3', maxCount: 1 }
+  ]),authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-        const { ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus } = req.body;
-        const queryText = `INSERT INTO complaints(ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+       const {
+        WardID,
+        GeoLat,
+        GeoLong,
+        Description,
+        ComplaintTypeID
+      } = req.body;
 
-        db.pool.execute(queryText, [ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus], (err, result) => {
-            if (err == null) {
-                console.log(result);
-                res.status(201).json({ message: "complaint registered sucessfully" });
-            }
-            else {
-                console.log("SQL Error\n", err);
-                res.status(500).json({ message: err });
 
+        // Assume req.user contains user info set by auth middleware
+        const UserID = req.user?.UserId;
+        const Status = 1; // default status (e.g., 1 = Pending)
+        const CreatedBy = req.user?.FirstName || "system";
+        const CreatedDate = new Date();
+        const ModifiedBy = null;
+        const ModifiedDate = null;
+        const ActiveStatus = 1;
+
+         // Get file paths or null if no file uploaded
+     const Image1 = req.files?.Image1 ? '/uploads/' + req.files.Image1[0].filename : null;
+
+      const Image2 = req.files?.Image2 ? '/uploads/' + req.files.Image2[0].filename : null;
+      const Image3 = req.files?.Image3 ? '/uploads/' + req.files.Image3[0].filename : null;
+
+        const queryText = `
+            INSERT INTO complaints
+            (WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        db.pool.execute(
+            queryText,
+            [
+                WardID,
+                GeoLat,
+                GeoLong,
+                Description,
+                Image1,
+                Image2,
+                Image3,
+                ComplaintTypeID,
+                UserID,
+                Status,
+                CreatedBy,
+                CreatedDate,
+                ModifiedBy,
+                ModifiedDate,
+                ActiveStatus
+            ],
+            (err, result) => {
+                if (!err) {
+                    console.log(result);
+                    res.status(201).json({ message: "Complaint registered successfully" });
+                } else {
+                    console.error("SQL Error:", err);  // log full error to console
+                    res.status(500).json({ message: "Database error", error: err.message || err });
+                }
             }
-        });
+        );
     } catch (error) {
+        console.error("Server Error:", error);
         res.status(400).json({ message: error.message });
-
     }
 });
 
-// /complaints/{id}	                Update a complaint (e.g., status)
-complaintRouter.put("/complaints/:id", authAndAuthorize(1, 2, 3), (req, res) => {
+
+// /update complaint status not by citizen               Update a complaint (e.g., status)
+complaintRouter.patch("/complaints", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
         const id = req.params.id; // Extract the ID from request parameters
         const { Status } = req.body;
@@ -98,11 +153,11 @@ complaintRouter.delete("/complaints/", authAndAuthorize(1, 2, 3, 4), (req, res) 
     try {
         // const id = req.params.id; // Extract the ID from request parameters
         // const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
-        
-        
+
+
         const UserID = req.user.UserID;
         // updating complaint status to 4 i.e Invalid for particular user id 
-        const queryText = `UPDATE complaints SET Status = 4 WHERE UserID = `;
+        const queryText = `UPDATE complaints SET Status = 4 and ActiveStatus = false WHERE UserID = ?`;
         db.pool.execute(queryText, [UserID], (err, result) => {
             if (err == null) {
                 if (result.affectedRows > 0) {
@@ -131,11 +186,11 @@ complaintRouter.get("/complaints/user/:userId", authAndAuthorize(1, 2, 3, 4), (r
     complaints.CreatedDate, complaints.ModifiedBy, complaints.ModifiedDate, complaints.ActiveStatus
     FROM complaints
     WHERE complaints.UserID = ?`;
-    db.pool.execute(queryText,[userId],(err,result)=>{
-        if(err == null){
-            res.send(result);
-        }
-        else {
+        db.pool.execute(queryText, [userId], (err, result) => {
+            if (err == null) {
+                res.json({ complaints: result });
+            }
+            else {
                 res.status(500).json({ message: "Database Error" });
             }
         });
@@ -155,11 +210,11 @@ complaintRouter.get("/complaints/status/:statusId", authAndAuthorize(1, 2, 3, 4)
     complaints.CreatedDate, complaints.ModifiedBy, complaints.ModifiedDate, complaints.ActiveStatus
     FROM complaints
     WHERE complaints.Status = ?`;
-    db.pool.execute(queryText,[statusId],(err,result)=>{
-        if(err == null){
-            res.send(result);
-        }
-        else {
+        db.pool.execute(queryText, [statusId], (err, result) => {
+            if (err == null) {
+                res.json({ complaints: result });
+            }
+            else {
                 res.status(500).json({ message: "Database Error" });
             }
         });
@@ -169,7 +224,7 @@ complaintRouter.get("/complaints/status/:statusId", authAndAuthorize(1, 2, 3, 4)
 });
 
 ///api/complaint-types	                Get all complaint types
-complaintRouter.get("/api/complaint-types", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+complaintRouter.get("/complaint-types", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const queryText = `SELECT ComplaintTypeID,ComplaintType,Description FROM complainttype`;
 
@@ -195,7 +250,9 @@ complaintRouter.get("/api/statuses", authAndAuthorize(1, 2, 3, 4), (req, res) =>
 
         db.pool.execute(queryText, (err, result) => {
             if (err == null) {
-                res.send(result);
+                res.json({
+                    status: result
+                });
             }
             else {
                 console.log("SQL Error", err);
