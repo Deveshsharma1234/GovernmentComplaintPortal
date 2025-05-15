@@ -42,7 +42,7 @@ const Header = () => {
                 </Link>
 
                 <Link to="/about-us">
-                    <SiAboutdotme className="size-10  bg-purple-600 rounded-2xl w-30  " />
+                    <h1 className="bg-purple-600 rounded-2xl w-40 h-10 flex items-center justify-center text-white font-medium">About-Us</h1>
                 </Link>
                 <a
                     href="https://consumeraffairs.nic.in/latest-updates"

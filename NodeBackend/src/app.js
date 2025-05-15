@@ -11,7 +11,10 @@ const citiesRouter = require('./routes/cities')
 const wardsRouter = require('./routes/wards')
 const cors = require('cors');
 const app = express();
+const path = require('path');
 
+// Serve the uploads folder statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(express.json());
