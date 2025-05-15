@@ -1,43 +1,89 @@
 import { Link } from "react-router-dom";
+import { MdHomeFilled } from "react-icons/md";
+import { SiAboutdotme } from "react-icons/si";
+import { BiSolidLogIn } from "react-icons/bi";
+import { useSelector } from 'react-redux';
+import { IoLogOut } from "react-icons/io5";
+import useLogout from "../hooks/useLogout";
+import { ToastContainer } from "react-toastify";
+import {ROLE_MAP as roleMap} from '../utils/constants';
+
+
+
 
 const Header = () => {
+    const isLoggedId = useSelector(store => store.user.isLoggedIn)
+    const user = useSelector(store => store.user.user)
+    const logout = useLogout();
+
+    const handleLogout = () => {
+        logout();
+    }
+
+ 
+
     return (
         <div className="navbar bg-amber-50 shadow-sm ">
+            <ToastContainer />
             <div className="flex-1">
-  <Link to={"/"} className="inline-block">
-    <img 
-      src="https://consumerhelpline.gov.in/public/assets/NCH-Logo.png" 
-      alt="NCH Logo"
-      className="w-auto pl-10" // adjust size as needed
-    />
-  </Link>
-</div>
+                <Link to={"/"} className="inline-block">
+                    <img
+                        src="https://consumerhelpline.gov.in/public/assets/NCH-Logo.png"
+                        alt="NCH Logo"
+                        className="w-auto pl-10" // adjust size as needed
+                    />
+                </Link>
+            </div>
 
 
-            <div className="flex gap-2">
-                <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
-                <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                        <div className="w-10 rounded-full">
-                            <img
-                                alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                        </div>
-                    </div>
-                    <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li>
-                            <Link to={"#profile"} className="justify-between">
-                                Profile
-                                <span className="badge">New</span>
-                            </Link>
-                        </li>
-                        <li><Link to={"#settings"}>Settings</Link></li>
-                        <li><Link to={"#logout"}>Logout</Link></li>
-                    </ul>
+            <div className="flex gap-4 items-center justify-center">
+                <Link to="/">
+                    <MdHomeFilled className="size-10 text-purple-600" />
+                </Link>
+
+                <Link to="/about-us">
+                    <SiAboutdotme className="size-10  bg-purple-600 rounded-2xl w-30  " />
+                </Link>
+                <a
+                    href="https://consumeraffairs.nic.in/latest-updates"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-purple-600 rounded-2xl w-40 h-10 flex items-center justify-center text-white font-medium"
+                >
+                    Knowledge Base
+                </a>
+                {roleMap[user?.RoleId] && user.RoleId!==4 ?(
+                    <Link className="flex items-center gap-2 bg-red-800 text-white px-3 py-2 rounded-lg hover:bg-red-950 transition" to={roleMap[user.RoleId].path}>
+                        {roleMap[user?.RoleId]?.text}
+                    </Link>
+                ):( isLoggedId && <Link to={"/profile"} className="flex items-center gap-2 bg-red-800 text-white px-3 py-2 rounded-lg hover:bg-red-950 transition" >
+                    
+                        { "Hello "+ user?.FirstName}
+                    </Link>)
+                    
+                    }
+
+                <div>
+                    {isLoggedId ? (
+                        <Link
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition"
+                        >
+                            <IoLogOut className="size-6" />
+                            Logout
+                        </Link>
+                    ) : (
+                        <Link
+                            to="/login"
+                            className="flex items-center gap-2 bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition"
+                        >
+                            <BiSolidLogIn className="size-6" />
+                            Login
+                        </Link>
+                    )}
                 </div>
             </div>
+
         </div>
     );
 }
