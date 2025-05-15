@@ -39,7 +39,7 @@ const About = () => {
 
         <div className="mt-12 text-center">
           <Link
-            to="/complaint"
+            to="/registerComplaints"
             className="btn btn-primary text-white font-semibold hover:bg-yellow-500 transition duration-300 ease-in-out"
           >
             Lodge a Complaint

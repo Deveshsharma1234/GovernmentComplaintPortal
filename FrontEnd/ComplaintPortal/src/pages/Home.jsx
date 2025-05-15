@@ -18,7 +18,7 @@ const Home = () => {
           A centralized platform to register and track your public grievances
         </p>
         <Link
-          to="/complaint"
+          to="/registerComplaints"
           className="inline-block bg-yellow-400 text-blue-900 px-5 py-3 rounded-full font-semibold hover:bg-yellow-300 transition  "
         >
           Lodge a Complaint
@@ -34,16 +34,17 @@ const Home = () => {
 
 
       {/* Services Section */}
-      <div className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-        <div className="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
+  <div className="py-12 px-6 max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+        <Link to={"/registerComplaints"}>  <div className="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
           <h3 className="text-xl font-bold mb-2">Lodge Complaint</h3>
           <p className="text-sm text-gray-600">Submit your grievance easily and securely through our guided form.</p>
         </div>
+        </Link>  
 
-        <div className="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
+       <Link to={"/getMyComplaints"} ><div className="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
           <h3 className="text-xl font-bold mb-2">Track Complaint</h3>
           <p className="text-sm text-gray-600">Check the status of your complaint and receive timely updates.</p>
-        </div>
+        </div></Link>
 
        <Link to={"/about-us"}><div className="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
           <h3 className="text-xl font-bold mb-2">About the Portal</h3>
