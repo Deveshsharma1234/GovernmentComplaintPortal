@@ -117,7 +117,7 @@ userRouter.patch("/user", authAndAuthorize(1, 2, 3, 4), (req, res) => {
             if (err) return res.status(400).json({ error: err.message });
 
             // Now fetch the updated user
-            db.pool.execute(`SELECT UserId, FirstName, LastName, Email, Phone, Address, Pincode, State, District, City, RoleId, ModifiedDate, ModifiedBy FROM users WHERE UserId = ?`,
+            db.pool.execute(`SELECT UserId, FirstName, LastName, Email, Phone, Address, Pincode, State, District, City, RoleId,ActiveState, ModifiedDate, ModifiedBy FROM users WHERE UserId = ?`,
                 [user.UserId],
                 (err2, rows) => {
                     if (err2) return res.status(500).json({ error: err2.message });
