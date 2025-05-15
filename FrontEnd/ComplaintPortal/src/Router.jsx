@@ -4,6 +4,9 @@ import App from "./App";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Profile from "./pages/profile";
+import EditProflile from "./components/EditProfile"
+
 
 
 const appRouter = createBrowserRouter([
@@ -26,6 +29,12 @@ const appRouter = createBrowserRouter([
             ,{
                 path: "/about-us",
                 element: <About/>
+            },{
+                path: "/profile",
+                element: <Profile/>
+            },{
+                path: "edit-profile",
+                element: <EditProflile/>
             }
 
         ]
