@@ -126,8 +126,8 @@ complaintRouter.post("/complaints", upload.fields([
 // /update complaint status not by citizen               Update a complaint (e.g., status)
 complaintRouter.patch("/complaints", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
-        const id = req.params.id; // Extract the ID from request parameters
-        const { Status } = req.body;
+        // const id = req.params.id; // Extract the ID from request parameters
+        const { Status ,id } = req.body;
         const queryText = `UPDATE complaints SET Status= ? WHERE ComplaintID = ?`;
         db.pool.execute(queryText, [Status, id], (err, result) => {
             if (err == null) {
@@ -155,7 +155,7 @@ complaintRouter.delete("/complaints/", authAndAuthorize(1, 2, 3, 4), (req, res) 
         // const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
 
 
-        const UserID = req.user.UserID;
+        const UserID = req.user.UserId;
         // updating complaint status to 4 i.e Invalid for particular user id 
         const queryText = `UPDATE complaints SET Status = 4 and ActiveStatus = false WHERE UserID = ?`;
         db.pool.execute(queryText, [UserID], (err, result) => {
