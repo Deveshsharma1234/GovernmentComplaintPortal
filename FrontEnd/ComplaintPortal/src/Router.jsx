@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import App from "./App";
 import Register from "./pages/Register";
@@ -8,42 +8,70 @@ import Profile from "./pages/profile";
 import EditProflile from "./components/EditProfile"
 import GetMyComplaints from "./components/GetMyComplaints";
 import RegisterComplaint from "./pages/RegisterComplaint";
+import Admin from "./pages/admin/Admin";
+import AdminWelcome from "./components/admin/AdminWelcome";
+import AdminDashboardOverview from "./components/admin/AdminDashboardOverview";
+import Users from "./components/admin/Users";
 
 
 
 const appRouter = createBrowserRouter([
     {
         path: "/",
-        element: <App/>,
-        children:[
+        element: <App />,
+        children: [
             {
                 index: true,
-                element :<Home/>
+                element: <Home />
             },
             {
                 path: "/register",
-                element: <Register/>
+                element: <Register />
             },
             {
                 path: "/login",
-                element: <Login/>
+                element: <Login />
             }
-            ,{
+            , {
                 path: "/about-us",
-                element: <About/>
-            },{
+                element: <About />
+            }, {
                 path: "/profile",
-                element: <Profile/>
-            },{
+                element: <Profile />
+            }, {
                 path: "/edit-profile",
-                element: <EditProflile/>
-            },{
+                element: <EditProflile />
+            }, {
                 path: "/getMyComplaints",
-                element: <GetMyComplaints/>
+                element: <GetMyComplaints />
             },
             {
                 path: "/registerComplaints",
-                element: <RegisterComplaint/>
+                element: <RegisterComplaint />
+            },
+            {
+                path: "/admin",
+                element: <Admin />,
+                children: [
+                    {
+                        index: true, // this makes it default route for /admin
+                        element: <AdminWelcome />,
+                    },
+                    {
+                        path: "dashboard",
+                        element: <AdminDashboardOverview/>
+                    },
+                    {
+                        path: "settings",
+                        element: <Profile/>
+                    },
+                    {
+                        path: "users",
+                        element: <Users/>
+                    }
+
+
+                ]
             }
 
         ]
