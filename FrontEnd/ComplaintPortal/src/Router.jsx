@@ -12,6 +12,7 @@ import Admin from "./pages/admin/Admin";
 import AdminWelcome from "./components/admin/AdminWelcome";
 import AdminDashboardOverview from "./components/admin/AdminDashboardOverview";
 import Users from "./components/admin/Users";
+import AdminRegister from "./pages/admin/AdminRegister";
 
 
 
@@ -68,6 +69,10 @@ const appRouter = createBrowserRouter([
                     {
                         path: "users",
                         element: <Users/>
+                    },
+                    {
+                        path: "register",
+                        element: <AdminRegister/>
                     }
 
 
