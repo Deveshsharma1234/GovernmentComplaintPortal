@@ -10,7 +10,7 @@ const UserTable = ({props, onBlock}) => {
       }
   };
     return (
-      <div className="overflow-x-auto max-h-[800px]">
+      <div className="overflow-x-auto overflow-y-visible max-h-[500px]">
       <table className="table table-zebra w-full">
         <thead className="bg-base-200 sticky top-0 z-10">
           <tr>

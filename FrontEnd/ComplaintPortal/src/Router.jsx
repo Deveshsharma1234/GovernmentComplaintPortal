@@ -68,6 +68,10 @@ const appRouter = createBrowserRouter([
                     {
                         path: "users",
                         element: <Users/>
+                    },
+                    {
+                        path: "register",
+                        element: <h1>REGISTER PAGE</h1>
                     }
 
 
