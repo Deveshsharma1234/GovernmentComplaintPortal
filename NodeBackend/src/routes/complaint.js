@@ -244,9 +244,71 @@ complaintRouter.get("/complaint-types", authAndAuthorize(1, 2, 3, 4), (req, res)
 });
 
 ///api/statuses	                        Get all status options
-complaintRouter.get("/api/statuses", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+complaintRouter.get("/statuses", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
         const queryText = `SELECT StatusID,Status FROM complaintstatus`;
+
+        db.pool.execute(queryText, (err, result) => {
+            if (err == null) {
+                res.json({
+                    status: result
+                });
+            }
+            else {
+                console.log("SQL Error", err);
+                response.status(500).json({ message: "Databasse Error" });
+            }
+        });
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// for stats api
+complaintRouter.get("/statuses/stats", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+    try {
+        const statusQuery = `
+            SELECT cs.Status AS StatusName, COUNT(c.Status) AS ComplaintCount
+            FROM complaintstatus cs
+            LEFT JOIN complaints c ON c.Status = cs.StatusID
+            GROUP BY cs.Status;
+        `;
+
+        const totalCountQuery = `SELECT COUNT(*) AS TotalComplaints FROM complaints;`;
+
+        db.pool.execute(statusQuery, (err1, statusResult) => {
+            if (err1) {
+                console.error("SQL Error (statusQuery):", err1);
+                return res.status(500).json({ message: "Database Error in status query" });
+            }
+
+            db.pool.execute(totalCountQuery, (err2, totalResult) => {
+                if (err2) {
+                    console.error("SQL Error (totalCountQuery):", err2);
+                    return res.status(500).json({ message: "Database Error in total count query" });
+                }
+
+                const totalComplaints = totalResult[0].TotalComplaints;
+
+                res.json({
+                    totalComplaints: totalComplaints,
+                    statuses: statusResult
+                });
+            });
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
+complaintRouter.get("/complaint-types/stats", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+    try {
+        const queryText = `SELECT ct.ComplaintType, COUNT(c.ComplaintID) AS ComplaintCount
+                            FROM complainttype ct
+                            LEFT JOIN complaints c ON ct.ComplaintTypeID = c.ComplaintTypeID
+                            GROUP BY ct.ComplaintType;`;
 
         db.pool.execute(queryText, (err, result) => {
             if (err == null) {
