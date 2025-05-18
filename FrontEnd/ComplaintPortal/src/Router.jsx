@@ -13,6 +13,7 @@ import AdminWelcome from "./components/admin/AdminWelcome";
 import AdminDashboardOverview from "./components/admin/AdminDashboardOverview";
 import Users from "./components/admin/Users";
 import AdminRegister from "./pages/admin/AdminRegister";
+import GetAllComplaints from "./components/admin/GetAllComplaints";
 
 
 
@@ -73,6 +74,10 @@ const appRouter = createBrowserRouter([
                     {
                         path: "register",
                         element: <AdminRegister/>
+                    },
+                    {
+                        path: "complaints",
+                        element: <GetAllComplaints/>
                     }
 
 

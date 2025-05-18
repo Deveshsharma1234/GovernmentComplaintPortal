@@ -51,7 +51,7 @@ const toggleSidebar = () => dispatch(toggleSideBar())
           </Link>
         </li>
         <li>
-          <Link to="#Books" className="flex items-center gap-2">
+          <Link to="/admin/complaints" className="flex items-center gap-2">
             <BsBookHalf className="text-lg" />
             Complaints
           </Link>
