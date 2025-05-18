@@ -266,7 +266,7 @@ complaintRouter.get("/statuses", authAndAuthorize(1, 2, 3, 4), (req, res) => {
 });
 
 // for stats api
-complaintRouter.get("/statuses/stats", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+complaintRouter.get("/statuses/stats", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
         const statusQuery = `
             SELECT cs.Status AS StatusName, COUNT(c.Status) AS ComplaintCount
@@ -303,7 +303,7 @@ complaintRouter.get("/statuses/stats", authAndAuthorize(1, 2, 3, 4), (req, res) 
 });
 
 
-complaintRouter.get("/complaint-types/stats", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+complaintRouter.get("/complaint-types/stats", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
         const queryText = `SELECT ct.ComplaintType, COUNT(c.ComplaintID) AS ComplaintCount
                             FROM complainttype ct

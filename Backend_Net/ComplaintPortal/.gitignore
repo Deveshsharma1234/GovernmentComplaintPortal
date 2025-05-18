@@ -1,0 +1,16 @@
+.vs/
+# Ignore build output directories
+bin/
+obj/
+
+# Ignore log files
+*.log
+*.json
+
+# Ignore other debug-specific files
+*.dll
+*.exe
+*.pdb
+*.cache
+*.sourcelink.json
+*.AssemblyReference.cache
