@@ -7,11 +7,10 @@ namespace ComplaintPortal.Controllers
     [ApiController]
     public class PingController : ControllerBase
     {
-
         [HttpGet]
-        public IActionResult Ping()
+        public  IActionResult Ping()
         {
-            return Ok(new { message = " Application is running successfully." });
+            return Ok( new { message= "This is To test Ping controller"});
         }
     }
 }
