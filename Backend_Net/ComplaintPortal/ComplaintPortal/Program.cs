@@ -1,10 +1,15 @@
 
+using System.Text;
 using ComplaintPortal.Business.Classes;
 using ComplaintPortal.Business.Contracts;
+using ComplaintPortal.DataAccess.Helper;
 using ComplaintPortal.DataAccess.Repository.Classes;
 using ComplaintPortal.DataAccess.Repository.Contracts;
 using ComplaintPortal.Entities.EFCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ComplaintPortal
 {
@@ -32,6 +37,25 @@ namespace ComplaintPortal
 
            );
 
+            // JWT Authentication Configuration
+            builder.Services.AddSingleton<JwtConfig>();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+                };
+            });
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
