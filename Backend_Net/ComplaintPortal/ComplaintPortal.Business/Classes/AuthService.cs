@@ -6,6 +6,7 @@ using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using ComplaintPortal.Business.Contracts;
+using ComplaintPortal.DataAccess.Helper;
 using ComplaintPortal.DataAccess.Repository.Contracts;
 using ComplaintPortal.Entities.DTO;
 using ComplaintPortal.Entities.Models;
@@ -16,17 +17,47 @@ namespace ComplaintPortal.Business.Classes
     {
 
         public readonly IUserRepository userRepo;
+        private readonly JwtConfig _jwtConfig;  //jwt service obj.
 
 
         //AuthServie ctor
-        public AuthService(IUserRepository userRepo)
+        public AuthService(IUserRepository userRepo, JwtConfig jwtConfig)
         {
             this.userRepo = userRepo;
+            _jwtConfig = jwtConfig;
         }
 
-        public Task<user> LoginAsync(LoginDto dto)
+        public async Task<LoginResponseDto> LoginAsync(LoginDto loginDto)
         {
-            throw new NotImplementedException();
+            if (loginDto == null || string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
+            {
+                throw new ArgumentException("Email and Password are required.");
+            }
+
+            // Repository method to check if the operator exists
+            var user= await userRepo.GetUserByEmailAsync(loginDto.Email);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("Email not found.");
+            }
+
+            // Check if the password matches (assuming hashed password in the database)
+            bool isPasswordValid = VerifyPassword(loginDto.Password, user.Password);
+            if (!isPasswordValid)
+            {
+                throw new UnauthorizedAccessException("Invalid password.");
+            }
+
+            // Generate and return the JWT token
+            var token = await GenerateTokenAsync(user.Email, user.UserId, user.RoleId);
+
+            return new LoginResponseDto
+            {
+                Token = token,
+                User = user
+               
+            };
+
         }
 
         public async Task<user> RegisterAdminAsync(RegisterAdminDto dto)
@@ -157,6 +188,12 @@ namespace ComplaintPortal.Business.Classes
             }
         }
 
+
+
+        public async Task<string> GenerateTokenAsync(string email, int crewId, int ? roleId)
+        {
+            return await Task.FromResult(_jwtConfig.GenerateToken( email, crewId, roleId));
+        }
 
         #endregion
     }

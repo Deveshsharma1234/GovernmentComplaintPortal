@@ -51,6 +51,54 @@ namespace ComplaintPortal.Controllers
 
 
 
+        // Login
+        [HttpPost("/login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+
+
+            try
+            {
+                if (loginDto == null)
+                {
+                    return BadRequest(new Dictionary<string, object> { { "Message", "Invalid request payload." } });
+                }
+
+                var res = await _service.LoginAsync(loginDto);
+                // Set cookie options
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = false, // Set true in production (HTTPS)
+                    SameSite = SameSiteMode.Lax, // or SameSiteMode.None for cross-origin
+                    Path = "/",
+                    Expires = DateTime.UtcNow.AddHours(2)
+                };
+
+                // Set cookie in the response
+                Response.Cookies.Append("token", res.Token, cookieOptions);
+
+                return Ok(new Dictionary<string, object> { { "user", res.User } });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new Dictionary<string, object> { { "Message", ex.Message } }); // Email not found
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new Dictionary<string, object> { { "Message", ex.Message } }); // Incorrect password
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new Dictionary<string, object> { { "Message", ex.Message } });// Invalid request payload
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new Dictionary<string, object> { { "Message", "An unexpected error occurred." } });
+            }
+        }
+
+
 
     }
 }

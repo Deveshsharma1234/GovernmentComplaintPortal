@@ -20,7 +20,7 @@ namespace ComplaintPortal.DataAccess.Helper
         }
 
         // Generate token with additional claims
-        public string GenerateToken(string username, string email, int id,int roleId)
+        public string GenerateToken(string email, int id, int ?roleId)
         {
             var secretKey = _config["JwtSettings:SecretKey"];
             var issuer = _config["JwtSettings:Issuer"];
@@ -29,7 +29,7 @@ namespace ComplaintPortal.DataAccess.Helper
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username), // Username claim
+               
                 new Claim(ClaimTypes.Email, email), // Email claim
                 new Claim("UserId", id.ToString()), // Crewoperator Id claim
                 new Claim("RoleId", roleId.ToString()),
