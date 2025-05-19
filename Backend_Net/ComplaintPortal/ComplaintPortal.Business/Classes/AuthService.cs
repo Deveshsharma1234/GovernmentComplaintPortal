@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using ComplaintPortal.Business.Contracts;
@@ -70,14 +71,54 @@ namespace ComplaintPortal.Business.Classes
             }
         }
 
-        public Task<user> RegisterCitizenAsync(RegisterCitizenDto dto)
+        public async Task<user> RegisterCitizenAsync(RegisterCitizenDto dto)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                var existingUser = await userRepo.GetUserByEmailAsync(dto.Email);
+                if (existingUser != null)
+                {
+                    throw new ArgumentException($"This Email '{dto.Email}' is already registered. Please Log In.");
+                }
+                var passwordHash = HashPassword(dto.Password);
+
+                var newUser = new user
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Email = dto.Email,
+                    Phone = dto.Phone,
+                    Address = dto.Address,
+                    Pincode = dto.Pincode,
+                    State = dto.State,
+                    District = dto.District,
+                    City = dto.City,
+                    RoleId = 4,
+                    Password = passwordHash
+                };
+                return await userRepo.AddUserAsync(newUser);
+
+            }
+            catch (ArgumentException ex)
+            {
+                // Log error (if logging is set up)
+                // Return meaningful error message to the caller
+                throw new InvalidOperationException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected exceptions
+                throw new InvalidOperationException("An error occurred while registering the crew operator.", ex);
+
+            }
+
+
         }
 
 
 
-
+        
 
 
 
