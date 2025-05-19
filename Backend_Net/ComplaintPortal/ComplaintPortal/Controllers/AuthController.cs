@@ -94,11 +94,23 @@ namespace ComplaintPortal.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new Dictionary<string, object> { { "Message", "An unexpected error occurred." } });
+                return StatusCode(500, new Dictionary<string, string> { { "Message", "An unexpected error occurred." } });
             }
         }
 
 
+        [HttpPost("/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                Response.Cookies.Delete("token");
+                return Ok(new Dictionary<string, string> { { "message" ,"LogedOut" } });
+            }catch(Exception ex)
+            {
+                return StatusCode(500, new Dictionary<string, string> { { "Message", ex.Message } });
+            }
 
+        }
     }
 }
