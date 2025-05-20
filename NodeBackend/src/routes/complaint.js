@@ -2,14 +2,33 @@ const express = require('express');
 const complaintRouter = express.Router();
 const db = require('../config/db');
 const authAndAuthorize = require('../middleware/authAndAuthorize');
-const upload=  require('../middleware/uploadConfig')
+const upload = require('../middleware/uploadConfig')
 
 
 
 // /complaints	                    Get all complaints
 complaintRouter.get("/complaints", authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-        const queryText = `SELECT ComplaintID, WardID, GeoLat, GeoLong, Description, Image1, Image2, Image3, ComplaintTypeID, UserID, Status, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, ActiveStatus FROM complaints`;
+
+
+        
+        const queryText = `SELECT
+         c.WardID, c.GeoLat, c.GeoLong, c.Image1, c.Image2, c.Image3, 
+         c.ComplaintTypeID, c.UserID, c.Status, c.CreatedBy, c.CreatedDate, c.ModifiedBy, c.ModifiedDate, 
+         c.ActiveStatus, 
+                        c.ComplaintID,
+                        c.Description,
+                        s.Status as StatusName,
+                        ci.City,
+                        d.District,
+                        st.State
+                        FROM complaints c
+                        INNER JOIN complaintstatus s ON c.Status = s.StatusID
+                        INNER JOIN wards w ON c.WardID = w.WardID
+                        INNER JOIN cities ci ON w.CityID = ci.CityID
+                        INNER JOIN districts d ON ci.DistrictID = d.DistrictID
+                        INNER JOIN states st ON d.StateID = st.StateID
+                        `;
         db.pool.execute(queryText, (err, result) => {
             if (err == null) {
                 res.json({
@@ -55,15 +74,15 @@ complaintRouter.post("/complaints", upload.fields([
     { name: 'Image1', maxCount: 1 },
     { name: 'Image2', maxCount: 1 },
     { name: 'Image3', maxCount: 1 }
-  ]),authAndAuthorize(1, 2, 3, 4), (req, res) => {
+]), authAndAuthorize(1, 2, 3, 4), (req, res) => {
     try {
-       const {
-        WardID,
-        GeoLat,
-        GeoLong,
-        Description,
-        ComplaintTypeID
-      } = req.body;
+        const {
+            WardID,
+            GeoLat,
+            GeoLong,
+            Description,
+            ComplaintTypeID
+        } = req.body;
 
 
         // Assume req.user contains user info set by auth middleware
@@ -75,11 +94,11 @@ complaintRouter.post("/complaints", upload.fields([
         const ModifiedDate = null;
         const ActiveStatus = 1;
 
-         // Get file paths or null if no file uploaded
-     const Image1 = req.files?.Image1 ? '/uploads/' + req.files.Image1[0].filename : null;
+        // Get file paths or null if no file uploaded
+        const Image1 = req.files?.Image1 ? '/uploads/' + req.files.Image1[0].filename : null;
 
-      const Image2 = req.files?.Image2 ? '/uploads/' + req.files.Image2[0].filename : null;
-      const Image3 = req.files?.Image3 ? '/uploads/' + req.files.Image3[0].filename : null;
+        const Image2 = req.files?.Image2 ? '/uploads/' + req.files.Image2[0].filename : null;
+        const Image3 = req.files?.Image3 ? '/uploads/' + req.files.Image3[0].filename : null;
 
         const queryText = `
             INSERT INTO complaints
@@ -127,7 +146,7 @@ complaintRouter.post("/complaints", upload.fields([
 complaintRouter.patch("/complaints", authAndAuthorize(1, 2, 3), (req, res) => {
     try {
         // const id = req.params.id; // Extract the ID from request parameters
-        const { Status ,id } = req.body;
+        const { Status, id } = req.body;
         const queryText = `UPDATE complaints SET Status= ? WHERE ComplaintID = ?`;
         db.pool.execute(queryText, [Status, id], (err, result) => {
             if (err == null) {
@@ -155,10 +174,10 @@ complaintRouter.delete("/complaints/", authAndAuthorize(1, 2, 3, 4), (req, res) 
         // const queryText = `DELETE FROM complaints WHERE ComplaintID = ?`;
 
 
-        const UserID = req.user.UserId;
+        const ComplaintID = req.body.ComplaintID;
         // updating complaint status to 4 i.e Invalid for particular user id 
-        const queryText = `UPDATE complaints SET Status = 4 and ActiveStatus = false WHERE UserID = ?`;
-        db.pool.execute(queryText, [UserID], (err, result) => {
+        const queryText = `UPDATE complaints SET Status = 4, ActiveStatus = false WHERE ComplaintID = ?`;
+        db.pool.execute(queryText, [ComplaintID], (err, result) => {
             if (err == null) {
                 if (result.affectedRows > 0) {
                     res.status(200).json({ message: "Deleted Successfully" });
@@ -167,6 +186,8 @@ complaintRouter.delete("/complaints/", authAndAuthorize(1, 2, 3, 4), (req, res) 
                 }
             }
             else {
+                 console.log(ComplaintID);
+                console.log(err);
                 res.status(500).json({ message: "Database Error" });
             }
         });
