@@ -89,47 +89,9 @@ const Home = () => {
         </div>
       </div>
     </section>
-    {/* Key Features section */}
-      <section className="py-16 px-4 bg-blue-200 text-center">
-      <h2 className="text-3xl font-semibold mb-6">Key Features</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-        <div>
-          <h3 className="text-xl font-semibold">Complaint Tracking</h3>
-          <p>Real-time tracking of complaint status and updates.</p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">Notifications</h3>
-          <p>Receive timely notifications on the resolution of your complaints.</p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">User Feedback</h3>
-          <p>Provide feedback on the resolution process for better improvement.</p>
-        </div>
-      </div>
-    </section>
-    {/* Pulic Grivience Section */}
-
-<section className="py-16 px-4 bg-gray-300 text-center">
-      <h2 className="text-3xl font-semibold mb-6">Public Grievances</h2>
-      <p className="text-lg mb-8">
-        Our portal has helped thousands of citizens resolve their grievances
-        effectively. Below are some success stories:
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-        <div className="p-4 bg-white shadow-lg">
-          <p>"My complaint was resolved within a week. Excellent service!"</p>
-          <p>- User A</p>
-        </div>
-        <div className="p-4 bg-white shadow-lg">
-          <p>"Quick resolution and constant updates kept me informed."</p>
-          <p>- User B</p>
-        </div>
-        <div className="p-4 bg-white shadow-lg">
-          <p>"I was impressed by the transparency and ease of use."</p>
-          <p>- User C</p>
-        </div>
-      </div>
-    </section>
+     
+   
+  
     {/* Testimonial Sectoin */}
      <section className="py-16 px-4 bg-blue-100 text-center">
       <h2 className="text-3xl font-semibold mb-6">What Users Are Saying</h2>
@@ -167,28 +129,7 @@ const Home = () => {
       </div>
     </section>
 
-    {/* Contact Section */}
-       <section className="py-16 px-4 bg-blue-300 text-center">
-      <h2 className="text-3xl font-semibold mb-6">Contact Us</h2>
-      <p className="text-lg mb-6">If you have any inquiries or need assistance, feel free to reach out!</p>
-      <form className="max-w-md mx-auto">
-        <input
-          type="text"
-          placeholder="Your Name"
-          className="input input-bordered w-full mb-4"
-        />
-        <input
-          type="email"
-          placeholder="Your Email"
-          className="input input-bordered w-full mb-4"
-        />
-        <textarea
-          placeholder="Your Message"
-          className="textarea textarea-bordered w-full mb-4"
-        ></textarea>
-        <button type="submit" className="btn btn-primary w-full">Submit</button>
-      </form>
-    </section>
+   
       
     </div>
     );
