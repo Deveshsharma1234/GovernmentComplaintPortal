@@ -59,6 +59,9 @@ namespace ComplaintPortal
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ICityService, CityService>();
+            builder.Services.AddScoped<ICityRepository, CityRepository>();
+
 
 
 

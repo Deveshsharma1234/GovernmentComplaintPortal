@@ -27,10 +27,7 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
                         .ToListAsync();
         }
 
-        public Task<List<city>> CityByDistrictId(int districId)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public  async Task<List<city>> GetAllCities()
         {
