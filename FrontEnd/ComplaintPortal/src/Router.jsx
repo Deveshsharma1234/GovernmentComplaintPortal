@@ -4,7 +4,7 @@ import App from "./App";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Profile from "./pages/profile";
+import Profile from "./pages/Profile";
 import EditProflile from "./components/EditProfile"
 import GetMyComplaints from "./components/GetMyComplaints";
 import RegisterComplaint from "./pages/RegisterComplaint";
