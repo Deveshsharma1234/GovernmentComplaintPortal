@@ -4,7 +4,7 @@
     {
         host: 'localhost',
         user: 'root',
-        password: '12345',
+        password: 'StrongPassw0rd!',
         port: 3306,
         database: 'Municipal_Complaint',
         waitForConnections: true,
