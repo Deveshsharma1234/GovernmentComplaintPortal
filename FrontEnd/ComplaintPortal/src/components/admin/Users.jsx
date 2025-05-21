@@ -4,7 +4,6 @@ import { ROLE_MAP } from '../../utils/constants';
 import { useEffect, useState } from 'react';
 import useGetAllUser from '../../hooks/admin/useGetAllUser'
 import { Link } from 'react-router';
-import useDleteUser from '../../hooks/admin/useDeleteUser';
 import useDeleteUser from '../../hooks/admin/useDeleteUser';
 import {toast} from 'react-toastify';
 
