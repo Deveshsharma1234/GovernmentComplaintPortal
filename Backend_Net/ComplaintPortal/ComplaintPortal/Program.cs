@@ -61,6 +61,14 @@ namespace ComplaintPortal
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICityService, CityService>();
             builder.Services.AddScoped<ICityRepository, CityRepository>();
+            builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
+            builder.Services.AddScoped<IDistrictService, DistrictService>();
+
+            builder.Services.AddScoped<IStateRepository, StateRepository>();
+            builder.Services.AddScoped<IStateService, StateService>();
+
+            builder.Services.AddScoped<IWardRepository, WardRepository>();
+            builder.Services.AddScoped<IWardService, WardService>();
 
 
 

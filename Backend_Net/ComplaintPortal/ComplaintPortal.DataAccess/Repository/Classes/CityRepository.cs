@@ -22,7 +22,7 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
 
         public  async Task<List<city>> CitiesByDistrictId(int districId)
         {
-            return await _context.cities
+           return  await _context.cities
                         .Where(c => c.DistrictID == districId)
                         .ToListAsync();
         }

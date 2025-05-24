@@ -1,6 +1,5 @@
 ﻿using ComplaintPortal.Business.Contracts;
-using ComplaintPortal.Entities.Models;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComplaintPortal.Controllers
