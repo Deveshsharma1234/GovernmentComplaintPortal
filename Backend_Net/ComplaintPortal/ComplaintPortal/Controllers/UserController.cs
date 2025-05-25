@@ -1,6 +1,8 @@
-﻿using ComplaintPortal.Business.Classes;
+﻿using ComplaintPortal.Attributes;
+using ComplaintPortal.Business.Classes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
+using ComplaintPortal.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +23,7 @@ namespace ComplaintPortal.Controllers
 
 
         // GET: api/<UserController>
-        [HttpGet]
+        [HttpGet("all")] // Route: api/User/all
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await userService.GetAllUser();
@@ -29,10 +31,12 @@ namespace ComplaintPortal.Controllers
 
         }
 
-        [HttpGet("{userID}")]
-        public async Task<IActionResult> GetUserById(int userID)
+        [HttpGet("profile")] // Route: api/User/profile
+        [RoleAuthorize(1,2,3,4)] // example for citizen role
+        public async Task<IActionResult> GetProfile()
         {
-            var user = await userService.GetUserByUserId(userID);
+            var userId = User.GetUserIdFromClaims();
+            var user = await userService.GetUserByUserId(userId);
             return Ok(new { message = "user", user });
 
         }
@@ -45,11 +49,13 @@ namespace ComplaintPortal.Controllers
 
 
 
-        [HttpPatch("{userId}")]
-        public async Task<ActionResult<UserResponseDto>> UpdateProfile(int userId, [FromBody] UserUpdateDto updateUser)
+        [HttpPatch()]
+        public async Task<ActionResult<UserResponseDto>> UpdateProfile( [FromBody] UserUpdateDto updateUser)
         {
             try
             {
+                var userId = User.GetUserIdFromClaims();
+
                 var updatedUser = await userService.UpdateProfile(updateUser, userId);
                 return Ok(updatedUser);
             }
