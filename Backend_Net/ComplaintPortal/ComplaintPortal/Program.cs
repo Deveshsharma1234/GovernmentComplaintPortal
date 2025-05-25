@@ -69,6 +69,7 @@ namespace ComplaintPortal
 
             builder.Services.AddScoped<IWardRepository, WardRepository>();
             builder.Services.AddScoped<IWardService, WardService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
 
 
