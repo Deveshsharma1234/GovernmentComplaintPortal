@@ -24,6 +24,7 @@ namespace ComplaintPortal.Controllers
 
         // GET: api/<UserController>
         [HttpGet("all")] // Route: api/User/all
+        [RoleAuthorize(1)]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await userService.GetAllUser();
