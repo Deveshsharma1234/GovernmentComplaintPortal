@@ -1,3 +1,4 @@
+
 ﻿using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.DataAccess.Repository.Contracts;
 using ComplaintPortal.Entities.DTO;
@@ -6,10 +7,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace ComplaintPortal.Business.Classes
 {
@@ -17,6 +20,7 @@ namespace ComplaintPortal.Business.Classes
     {
 
         public readonly IComplaintRepository complaintRepository;
+
         private readonly IWebHostEnvironment _env;
 
         public ComplaintService(IComplaintRepository complaintRepository, IWebHostEnvironment env)
@@ -24,6 +28,7 @@ namespace ComplaintPortal.Business.Classes
             this.complaintRepository = complaintRepository;
             this._env = env;
         }
+
 
         public ComplaintService(IComplaintRepository complaintRepository)
         {
@@ -39,8 +44,6 @@ namespace ComplaintPortal.Business.Classes
         {
             return await complaintRepository.GetRawComplaintsByUserIdAsync(userId);
         }
-
-     
 
         public async Task RegisterComplaintAsync(RegisterComplaintRequest request)
         {

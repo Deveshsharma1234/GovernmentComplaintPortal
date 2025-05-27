@@ -1,9 +1,10 @@
-﻿using ComplaintPortal.DataAccess.Repository.Contracts;
+using ComplaintPortal.DataAccess.Repository.Contracts;
 using ComplaintPortal.Entities.DTO;
 using ComplaintPortal.Entities.EFCore;
 using ComplaintPortal.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -101,11 +102,13 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
 
 
 
+
         public async Task AddComplaintAsync(complaint complaint)
         {
             _context.complaints.Add(complaint);
             await _context.SaveChangesAsync();
         }
+
 
 
 

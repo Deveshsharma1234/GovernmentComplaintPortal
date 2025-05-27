@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,19 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< Updated upstream
+
     <Folder Include="Models\" />
     <Folder Include="EFCore\" />
     <Folder Include="DTO\" />
-=======
+
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
->>>>>>> Stashed changes
+
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
-  </ItemGroup>
+ 
 
 </Project>

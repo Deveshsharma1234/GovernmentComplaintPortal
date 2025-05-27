@@ -1,4 +1,3 @@
-﻿
 using ComplaintPortal.Attributes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
@@ -20,7 +19,9 @@ namespace ComplaintPortal.Controllers
             this.complaintService = complaintService;
         }
 
+
         [HttpGet("/complaints")]
+
         [RoleAuthorize(1,2,3)]
         public async Task<IActionResult> GetAllComplaints()
         {
@@ -29,7 +30,9 @@ namespace ComplaintPortal.Controllers
         }
 
 
+
         [HttpGet("/myComplaints")]
+
         [RoleAuthorize(1,2,3,4)]
         public async Task <IActionResult> GetAllMyCompliants()
         {
@@ -37,6 +40,7 @@ namespace ComplaintPortal.Controllers
             var complaints = await complaintService.GetRawComplaintsByUserIdAsync(userId);
             return Ok(new { message = "complaints", complaints });
         }
+
 
 
         [HttpPatch("/complaints")]
@@ -54,17 +58,11 @@ namespace ComplaintPortal.Controllers
             }
         }
 
-
-
         [HttpPost("/complaints")]
         public async Task<IActionResult> RegisterComplaint([FromForm] RegisterComplaintRequest request)
         {
             await complaintService.RegisterComplaintAsync(request);
             return Ok(new { message = "Complaint registered successfully!" });
         }
-
-
-
-
     }
 }
