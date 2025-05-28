@@ -1,12 +1,14 @@
-﻿using System;
+using ComplaintPortal.DataAccess.Repository.Contracts;
+using ComplaintPortal.Entities.DTO;
+using ComplaintPortal.Entities.EFCore;
+using ComplaintPortal.Entities.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ComplaintPortal.DataAccess.Repository.Contracts;
-using ComplaintPortal.Entities.DTO;
-using ComplaintPortal.Entities.EFCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintPortal.DataAccess.Repository.Classes
 {
@@ -97,6 +99,16 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
             await _context.SaveChangesAsync();
             return true;
         }
+
+
+
+
+        public async Task AddComplaintAsync(complaint complaint)
+        {
+            _context.complaints.Add(complaint);
+            await _context.SaveChangesAsync();
+        }
+
 
 
 

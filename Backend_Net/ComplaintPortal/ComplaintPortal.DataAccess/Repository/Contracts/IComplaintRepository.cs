@@ -1,9 +1,13 @@
-﻿using System;
+using ComplaintPortal.Entities.DTO;
+using ComplaintPortal.Entities.Models;
+using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ComplaintPortal.Entities.DTO;
+
+
 
 namespace ComplaintPortal.DataAccess.Repository.Contracts
 {
@@ -12,6 +16,8 @@ namespace ComplaintPortal.DataAccess.Repository.Contracts
         Task<bool> UpdateComplaintStatusAsync(int complaintId, int status);
         Task<List<SimpleComplaintDto>> GetRawComplaintsByUserIdAsync(int userId);
         Task<List<ComplaintResponseDto>> GetAllComplaintsAsync();
+        Task AddComplaintAsync(complaint complaint);
+
 
     }
 }

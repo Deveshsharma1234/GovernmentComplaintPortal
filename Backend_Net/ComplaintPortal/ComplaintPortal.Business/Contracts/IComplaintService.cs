@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ namespace ComplaintPortal.Business.Contracts
       Task<List<ComplaintResponseDto>> GetAllComplaintsAsync();
         Task<List<SimpleComplaintDto>> GetRawComplaintsByUserIdAsync(int userId);
         Task<bool> UpdateComplaintStatusAsync(int complaintId, int status);
+        Task RegisterComplaintAsync(RegisterComplaintRequest request);
 
     }
 }

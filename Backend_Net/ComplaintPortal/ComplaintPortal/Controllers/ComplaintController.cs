@@ -1,4 +1,3 @@
-﻿
 using ComplaintPortal.Attributes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ComplaintPortal.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class ComplaintController : ControllerBase
     {
@@ -19,8 +18,10 @@ namespace ComplaintPortal.Controllers
         {
             this.complaintService = complaintService;
         }
-        [HttpGet("all")]
-        
+
+
+        [HttpGet("/complaints")]
+
         [RoleAuthorize(1,2,3)]
         public async Task<IActionResult> GetAllComplaints()
         {
@@ -28,7 +29,10 @@ namespace ComplaintPortal.Controllers
             return Ok(new { message = "complaints", complaints });
         }
 
-        [HttpGet("my")]
+
+
+        [HttpGet("/myComplaints")]
+
         [RoleAuthorize(1,2,3,4)]
         public async Task <IActionResult> GetAllMyCompliants()
         {
@@ -38,7 +42,8 @@ namespace ComplaintPortal.Controllers
         }
 
 
-        [HttpPatch("update-status")]
+
+        [HttpPatch("/complaints")]
         [RoleAuthorize(2, 3)]
         public async Task<IActionResult> UpdateMyComplaintStatus([FromBody] UpdateComplaintStatusRequest request)
         {
@@ -53,6 +58,11 @@ namespace ComplaintPortal.Controllers
             }
         }
 
-
+        [HttpPost("/complaints")]
+        public async Task<IActionResult> RegisterComplaint([FromForm] RegisterComplaintRequest request)
+        {
+            await complaintService.RegisterComplaintAsync(request);
+            return Ok(new { message = "Complaint registered successfully!" });
+        }
     }
 }
