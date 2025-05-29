@@ -1,5 +1,4 @@
 
-using System.Text;
 using ComplaintPortal.Business.Classes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.DataAccess.Helper;
@@ -8,8 +7,8 @@ using ComplaintPortal.DataAccess.Repository.Contracts;
 using ComplaintPortal.Entities.EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ComplaintPortal
 {
@@ -21,7 +20,16 @@ namespace ComplaintPortal
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            //builder.Services.AddControllers(); and removed camel case serialization below and added controller
+            // Add services to the container.
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    // This line disables the default camelCase naming policy,
+                    // so properties will be serialized with their original PascalCase names.
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -36,6 +44,15 @@ namespace ComplaintPortal
 )
 
            );
+
+            builder.Services.AddCors((options) =>
+            {
+                options.AddPolicy("policy1", (policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                }));
+            });
 
             // JWT Authentication Configuration
             builder.Services.AddSingleton<JwtConfig>();
@@ -70,7 +87,11 @@ namespace ComplaintPortal
             builder.Services.AddScoped<IWardRepository, WardRepository>();
             builder.Services.AddScoped<IWardService, WardService>();
             builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
+            builder.Services.AddScoped<IComplaintTypeRepository, ComplaintTypeRepository>(); // Added
+            builder.Services.AddScoped<IComplaintStatusRepository, ComplaintStatusRepository>(); // Added
+
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
 
 
@@ -89,8 +110,9 @@ namespace ComplaintPortal
 
             app.UseHttpsRedirection();
 
+            app.UseCors("policy1");
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

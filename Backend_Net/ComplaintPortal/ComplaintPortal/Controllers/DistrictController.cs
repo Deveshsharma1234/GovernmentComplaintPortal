@@ -1,5 +1,6 @@
 ﻿using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace ComplaintPortal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors(PolicyName = "policy1")]
     public class DistrictController : ControllerBase
     {
         private readonly IDistrictService districtService;
@@ -22,14 +24,14 @@ namespace ComplaintPortal.Controllers
         {
            var districts =  await districtService.GetAllDistricts();
 
-            return Ok(new { message = "districts", districts });
+            return Ok(new { districts });
         }
 
-        [HttpGet("/district{stateId}")]
+        [HttpGet("/api/district/{stateId}")]
         public async Task<IActionResult> GetDistrictByStateId(int stateId)
         {
             var districts = await districtService.GetDistrictsByStateId(stateId);
-            return Ok(new { message = "districts", districts });
+            return Ok(new {  districts });
         }
     }
 }

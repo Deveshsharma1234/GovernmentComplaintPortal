@@ -12,7 +12,8 @@ const useLocationData = (selectedState, selectedDistrict,selectedCity) => {
   useEffect(() => {
     axios.get(`${BASE_URL}/getAllStates`, { withCredentials: true })
       .then(res => {
-        const stateData = res.data?.states || [];
+        const stateData = res.data?.states|| res.data?.Result|| [];
+        console.log(stateData);
         setStates(stateData);
       })
       .catch(err => {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.DataAccess.Repository.Contracts;
+using ComplaintPortal.Entities.DTO;
 using ComplaintPortal.Entities.Models;
 
 namespace ComplaintPortal.Business.Classes
@@ -16,7 +17,7 @@ namespace ComplaintPortal.Business.Classes
         {
             this.stateRepo = stateRepository;
         }
-        public async Task<List<state>> GetStates()
+        public async Task<List<StateResponseDto>> GetStates()
         {
             return await stateRepo.GetStates();
         }

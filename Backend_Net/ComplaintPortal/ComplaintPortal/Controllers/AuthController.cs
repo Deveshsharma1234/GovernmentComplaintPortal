@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 namespace ComplaintPortal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors(PolicyName = "policy1")]
     public class AuthController : ControllerBase
     {
 
@@ -52,7 +54,7 @@ namespace ComplaintPortal.Controllers
 
 
         // Login
-        [HttpPost("/login")]
+        [HttpPost("/api/login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
 
@@ -99,7 +101,7 @@ namespace ComplaintPortal.Controllers
         }
 
 
-        [HttpPost("/logout")]
+        [HttpPost("/api/logout")]
         public async Task<IActionResult> Logout()
         {
             try
