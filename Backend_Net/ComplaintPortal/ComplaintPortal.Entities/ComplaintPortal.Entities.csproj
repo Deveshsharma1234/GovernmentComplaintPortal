@@ -10,7 +10,6 @@
 
     <Folder Include="Models\" />
     <Folder Include="EFCore\" />
-    <Folder Include="DTO\" />
 
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
