@@ -63,8 +63,8 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
             // Combine them into the ComplaintStatsDto
             return new ComplaintStatsDto
             {
-                TotalComplaints = totalComplaints,
-                Statuses = statusCounts
+                totalComplaints = totalComplaints,
+                statuses = statusCounts
             };
         }
 

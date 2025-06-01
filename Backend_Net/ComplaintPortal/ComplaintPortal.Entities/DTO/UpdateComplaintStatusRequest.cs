@@ -10,7 +10,7 @@ namespace ComplaintPortal.Entities.DTO
    public class UpdateComplaintStatusRequest
     {
         [Required]
-        public int ComplaintId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Status must be a positive integer.")]

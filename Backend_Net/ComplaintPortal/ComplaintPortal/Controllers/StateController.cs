@@ -20,7 +20,8 @@ namespace ComplaintPortal.Controllers
       public  async Task  <IActionResult> GetState()
         {
             var States = stateService.GetStates();
-            return Ok(new { States.Result});
+            return Ok(new { States.Result });
+            //return Ok(new { message = "states", States});
 
         }
     }

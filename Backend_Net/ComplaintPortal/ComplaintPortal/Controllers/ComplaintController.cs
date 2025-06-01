@@ -1,9 +1,11 @@
 using ComplaintPortal.Attributes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
+using ComplaintPortal.Entities.DTO.RequestDtos;
 using ComplaintPortal.Helpers;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComplaintPortal.Controllers
@@ -29,9 +31,10 @@ namespace ComplaintPortal.Controllers
             var complaints = await _complaintService.GetAllComplaintsAsync();
             if (complaints == null || complaints.Count == 0)
             {
-                return Ok(new { message = "No complaints found.", complaints = new List<ComplaintResponseDto>() });
+                return NoContent();
             }
-            return Ok(new { message = "Complaints retrieved successfully", complaints });
+            //return Ok(new { message = "Complaints retrieved successfully", complaints });
+            return Ok(new {complaints});
         }
 
         [HttpGet("mycomplaints")] // GET /api/Complaint/mycomplaints
@@ -77,27 +80,24 @@ namespace ComplaintPortal.Controllers
             }
 
             // You might want to get the UserID and CreatedBy from the authenticated user's claims here
-            // request.UserID = User.GetUserIdFromClaims(); // Example
+             //request.UserID = User.GetUserIdFromClaims(); // Example
             // request.CreatedBy = User.Identity.Name; // Example
 
             await _complaintService.RegisterComplaintAsync(request);
-            return StatusCode(201, new { message = "Complaint registered successfully!" }); // Use 201 Created status
+            //return StatusCode(201, new { message = "Complaint registered successfully!" }); // Use 201 Created status
+            return Created(nameof(RegisterComplaint), "Complaint Registered Succesfully");
         }
 
-        [HttpPatch("{complaintId}/status")] // PATCH /api/Complaint/{complaintId}/status
-        [RoleAuthorize(2, 3)] // Roles like Admin (2) or Municipality Employee (3) can update status
-        public async Task<IActionResult> UpdateComplaintStatus(int complaintId, [FromBody] UpdateComplaintStatusRequest request)
+        [HttpPatch("/api/complaints")] // PATCH /api/Complaint/{complaintId}/status
+        [RoleAuthorize(1,2, 3)] // Roles like Admin (2) or Municipality Employee (3) can update status
+        public async Task<IActionResult> UpdateComplaintStatus([FromBody] UpdateComplaintStatusRequest request)
         {
-            if (request.ComplaintId != complaintId)
-            {
-                return BadRequest(new { message = "Complaint ID in route does not match body." });
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _complaintService.UpdateComplaintStatusAsync(request.ComplaintId, request.Status);
+            var result = await _complaintService.UpdateComplaintStatusAsync(request.Id, request.Status);
             if (result)
             {
                 return Ok(new { message = "Complaint status updated successfully." });
@@ -108,11 +108,14 @@ namespace ComplaintPortal.Controllers
             }
         }
 
-        [HttpDelete("{complaintId}")] // DELETE /api/Complaint/{complaintId}
+        [HttpDelete("/api/complaints")] // DELETE /api/Complaint/{complaintId}
         [RoleAuthorize(1, 2)] // Only highly privileged roles (e.g., SuperAdmin, Admin) can soft delete
-        public async Task<IActionResult> SoftDeleteComplaint(int complaintId)
+        public async Task<IActionResult> SoftDeleteComplaint([FromBody] DeleteReqDto deleteReqDto)
         {
-            var result = await _complaintService.SoftDeleteComplaintAsync(complaintId);
+            if(!ModelState.IsValid)
+                { return BadRequest(ModelState); }
+
+            var result = await _complaintService.SoftDeleteComplaintAsync(deleteReqDto.ComplaintId);
             if (result)
             {
                 return Ok(new { message = "Complaint soft-deleted successfully (status changed to invalid and active status set to false)." });
@@ -136,41 +139,43 @@ namespace ComplaintPortal.Controllers
             return Ok(new { message = "Complaint types retrieved successfully", types });
         }
 
+        // --- Complaint Status Endpoints ---
         [HttpGet("/api/complaint-types/stats")] // GET /api/Complaint/types/stats
         [RoleAuthorize(1, 2, 3)] // Example: Admins/employees can see stats
         public async Task<IActionResult> GetComplaintTypeStatistics()
         {
-            var stats = await _complaintService.GetComplaintTypeStatsAsync();
-            if (stats == null || !((List<ComplaintTypeStatsDto>)stats).Any())
+            var status = await _complaintService.GetComplaintTypeStatsAsync();
+            if (status == null || !((List<ComplaintTypeStatsDto>)status).Any())
             {
-                return Ok(new { message = "No complaint type statistics available.", stats = new List<ComplaintTypeStatsDto>() });
+                return NoContent();
             }
-            return Ok(new { message = "Complaint type statistics retrieved successfully", stats });
+            return Ok(new {status });
         }
 
-        // --- Complaint Status Endpoints ---
 
         [HttpGet("/api/statuses")] // GET /api/Complaint/statuses
         public async Task<IActionResult> GetAllComplaintStatuses()
         {
-            var statuses = await _complaintService.GetAllStatusesAsync();
-            if (statuses == null || !((List<Entities.Models.complaintstatus>)statuses).Any())
+            var status = await _complaintService.GetAllStatusesAsync();
+            if (status == null || !((List<Entities.Models.complaintstatus>)status).Any())
             {
                 return Ok(new { message = "No complaint statuses found.", statuses = new List<Entities.Models.complaintstatus>() });
             }
-            return Ok(new { message = "Complaint statuses retrieved successfully", statuses });
+            return Ok(new { status });
         }
 
-        [HttpGet("stats")] // GET /api/Complaint/stats
-        [RoleAuthorize(1, 2, 3)] // Example: Admins/employees can see overall stats
+        [HttpGet("/api/statuses/stats")] // GET /api/Complaint/stats
+        [RoleAuthorize(1, 2, 3)] 
         public async Task<IActionResult> GetOverallComplaintStatistics()
         {
             var stats = await _complaintService.GetOverallComplaintStatsAsync();
             if (stats == null) // ComplaintStatsDto will always be non-null but its inner lists might be empty
             {
-                return Ok(new { message = "No overall complaint statistics available.", stats = new ComplaintStatsDto() });
+                return NoContent();
             }
-            return Ok(new { message = "Overall complaint statistics retrieved successfully", stats });
+           
+                  
+            return Ok(new {stats.totalComplaints,stats.statuses});
         }
     }
 }

@@ -10,6 +10,8 @@ namespace ComplaintPortal.Entities.DTO
         public decimal GeoLat { get; set; }
         public decimal GeoLong { get; set; }
         public string Description { get; set; }
+
+        
         public int ComplaintTypeID { get; set; }
 
         public IFormFile? Image1 { get; set; }

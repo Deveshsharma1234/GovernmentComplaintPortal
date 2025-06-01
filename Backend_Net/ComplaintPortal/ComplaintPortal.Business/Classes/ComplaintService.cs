@@ -12,31 +12,35 @@ namespace ComplaintPortal.Business.Classes
         private readonly IComplaintRepository _complaintRepository;
         private readonly IComplaintTypeRepository _complaintTypeRepository; // New injection
         private readonly IComplaintStatusRepository _complaintStatusRepository; // New injection
+        private readonly IRoleRepository _roleRepository;
         private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         // Consolidated constructor to inject all required dependencies
         public ComplaintService(
             IComplaintRepository complaintRepository,
-            IComplaintTypeRepository complaintTypeRepository, // Inject this
-            IComplaintStatusRepository complaintStatusRepository, // Inject this
-            IWebHostEnvironment env)
+            IComplaintTypeRepository complaintTypeRepository,
+            IComplaintStatusRepository complaintStatusRepository, 
+            IRoleRepository roleRepository,
+            IWebHostEnvironment env,
+            IHttpContextAccessor httpContextAccessor)
         {
             _complaintRepository = complaintRepository;
             _complaintTypeRepository = complaintTypeRepository;
             _complaintStatusRepository = complaintStatusRepository;
+            _roleRepository = roleRepository;
             _env = env;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<ComplaintResponseDto>> GetAllComplaintsAsync()
         {
-            // Corrected to call the appropriate method from the repository
             return await _complaintRepository.GetAllComplaintsWithDetailsAsync();
         }
 
         public async Task<List<SimpleComplaintDto>> GetRawComplaintsByUserIdAsync(int userId)
-        {
-            // Corrected to call the appropriate method from the repository
-            return await _complaintRepository.GetComplaintsByUserIdAsync(userId);
+        { 
+           return await _complaintRepository.GetComplaintsByUserIdAsync(userId);
         }
 
         public async Task<bool> UpdateComplaintStatusAsync(int complaintId, int status)
@@ -69,8 +73,28 @@ namespace ComplaintPortal.Business.Classes
                 CreatedDate = DateTime.UtcNow,
                 ActiveStatus = true,
                 // UserID can be obtained from JWT token if authenticated user is registering
-                // CreatedBy can also be obtained from JWT token
             };
+
+            // --- Extract claims from the authenticated user ---
+            var currentUser = _httpContextAccessor.HttpContext?.User;
+
+            // 1. Extract RoleId for CreatedBy field
+            var roleIdClaim = currentUser.FindFirst("RoleId"); // Access the custom "RoleId" claim
+            if (roleIdClaim != null && !string.IsNullOrEmpty(roleIdClaim.Value))
+            {
+                // Set the string value of RoleId to CreatedBy
+                //IRole is called to get the string value here for particualr role id
+                var roleDtoObj = await _roleRepository.GetRoleByIdAsync(int.Parse(roleIdClaim.Value));
+                newComplaint.CreatedBy = roleDtoObj.RoleName;
+            }
+
+            // 2. Extract UserID (from "UserId" claim)
+            var userIdClaim = currentUser.FindFirst("UserId"); // Access the custom "UserId" claim
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedUserId))
+            {
+                newComplaint.UserID = parsedUserId;
+            }
+
 
             // Handle optional image uploads
             if (request.Image1 != null)
