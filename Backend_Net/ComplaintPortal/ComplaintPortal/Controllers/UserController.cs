@@ -3,6 +3,7 @@ using ComplaintPortal.Business.Classes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
 using ComplaintPortal.Helpers;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace ComplaintPortal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors(PolicyName = "policy1")]
     public class UserController : ControllerBase
     {
         public readonly IUserService userService;

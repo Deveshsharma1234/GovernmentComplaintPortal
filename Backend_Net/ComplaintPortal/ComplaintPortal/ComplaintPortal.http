@@ -1,6 +1,42 @@
-@ComplaintPortal_HostAddress = http://localhost:5293
+@ComplaintPortal_HostAddress = http://localhost:50298
 
-GET {{ComplaintPortal_HostAddress}}/weatherforecast/
-Accept: application/json
+
+GET {{ComplaintPortal_HostAddress}}/api/complaints
+
+###
+
+GET {{ComplaintPortal_HostAddress}}/api/complaints
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkBnbWFpbC5jb20iLCJVc2VySWQiOiIyIiwiUm9sZUlkIjoiMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkdvdmVybm1lbnQgUmVwcmVzZW50YXRpdmUiLCJleHAiOjE3NDg3MjI0MzksImlzcyI6IkNvbXBsYWludFBvcnRhbEJhY2tlbmQiLCJhdWQiOiJDb21wbGFpbnRQb3J0YWwifQ.q2zqBEc9ea-6hPCtPxLAi7SQPmEb8G9ETu6sW8SYaqc
+###
+
+GET {{ComplaintPortal_HostAddress}}/api/complaint/types
+
+
+###
+
+#allcomplaintStatuses
+GET {{ComplaintPortal_HostAddress}}/api/statuses
+
+###
+
+#Update complaint status
+@complaintId=0
+PATCH {{ComplaintPortal_HostAddress}}/api/complaint/{{complaintId}}/status
+Content-Type: application/json
+
+{
+  //UpdateComplaintStatusRequest
+}
+
+###
+
+# LOGIN 
+POST {{ComplaintPortal_HostAddress}}/api/login
+Content-Type: application/json
+
+{
+  "email":"",
+  "password":""
+}
 
 ###

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ComplaintPortal.Entities.DTO;
+using ComplaintPortal.Entities.DTO.ResponseDtos;
 using ComplaintPortal.Entities.Models;
 
 namespace ComplaintPortal.DataAccess.Repository.Contracts
 {
-     public interface IStateRepository
+  public  interface IRoleRepository
     {
-        Task<List<StateResponseDto>> GetStates();
+        public  Task<RoleNameDto> GetRoleByIdAsync(int RoleId);
     }
 }
