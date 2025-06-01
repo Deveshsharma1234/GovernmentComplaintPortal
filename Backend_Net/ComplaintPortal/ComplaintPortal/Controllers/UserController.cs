@@ -25,12 +25,12 @@ namespace ComplaintPortal.Controllers
 
 
         // GET: api/<UserController>
-        [HttpGet("all")] // Route: api/User/all
+        [HttpGet("/api/getAllUsers")] // Route: api/User/all
         [RoleAuthorize(1)]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await userService.GetAllUser();
-            return Ok(new { message = "users", users });
+            return Ok(new { users });
 
         }
 
@@ -43,11 +43,16 @@ namespace ComplaintPortal.Controllers
             return Ok(new { message = "user", user });
 
         }
+
+
+
         [HttpDelete("{userID}")]
         public async Task<IActionResult> DeleteUser(int userID)
         {
             var user = userService.DeleteUser(userID);
             return Ok(new { message = "user deleted succesfully", user });
+
+            
         }
 
 
@@ -60,7 +65,7 @@ namespace ComplaintPortal.Controllers
                 var userId = User.GetUserIdFromClaims();
 
                 var updatedUser = await userService.UpdateProfile(updateUser, userId);
-                return Ok(updatedUser);
+                return Ok(new { message="User profile updated successfully", updatedUser });
             }
             catch (KeyNotFoundException ex)
             {

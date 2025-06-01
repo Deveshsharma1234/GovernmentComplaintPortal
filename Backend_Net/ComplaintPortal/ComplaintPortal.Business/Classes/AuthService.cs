@@ -83,7 +83,9 @@ namespace ComplaintPortal.Business.Classes
                     District = dto.District,
                     City = dto.City,
                     RoleId = dto.RoleId,
-                    Password = passwordHash
+                    Password = passwordHash,
+                    //ActiveState = true as its default value is true or 1 already
+                    ActiveState = 1
                 };
                 return await userRepo.AddUserAsync(newUser);
 

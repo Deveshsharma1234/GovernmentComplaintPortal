@@ -33,7 +33,7 @@ public partial class user
 
     public DateTime? ModifiedDate { get; set; }
 
-    public bool? ActiveState { get; set; }
+    public int? ActiveState { get; set; }
 
     public string? ModifiedBy { get; set; }
 

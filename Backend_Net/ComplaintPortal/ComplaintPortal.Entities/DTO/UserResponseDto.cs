@@ -18,7 +18,7 @@ namespace ComplaintPortal.Entities.DTO
         public string State { get; set; }
         public string District { get; set; }
         public string  City { get; set; }
-        public int ? RoleId { get; set; }
+        public int? RoleId { get; set; }
 
     }
 }

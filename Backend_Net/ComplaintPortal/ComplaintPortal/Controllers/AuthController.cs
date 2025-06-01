@@ -4,6 +4,7 @@ using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using ComplaintPortal.Attributes;
 namespace ComplaintPortal.Controllers
 {
     [Route("api/[controller]")]
@@ -21,14 +22,14 @@ namespace ComplaintPortal.Controllers
 
 
 
-
-        [HttpPost("citizen-register")]
-        public async Task<IActionResult> RegisterCitizen(RegisterCitizenDto dto)
+        //Register Citizen
+        [HttpPost("/api/citizen-register")]
+        public async Task<IActionResult> RegisterCitizen([FromBody]RegisterCitizenDto dto)
         {
             try
             {
                 var user = await _service.RegisterCitizenAsync(dto);
-                return Ok(new { message = "User Created Successfully", user });
+                return Ok(new { message = "User Created Succesfull", user });
             }
             catch (Exception ex)
             {
@@ -36,14 +37,16 @@ namespace ComplaintPortal.Controllers
             }
         }
 
-        [HttpPost("admin/register")]
+        // Registeration of Govt. Employee, Govt Representative only by admin
+        [HttpPost("/api/admin/register")]
         //[Authorize(Roles = "Admin")] // Requires JWT middleware config
-        public async Task<IActionResult> RegisterAdmin(RegisterAdminDto dto)
+        [RoleAuthorize(1)] //only role id 1 admin
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminDto dto)
         {
             try
             {
                 var user = await _service.RegisterAdminAsync(dto);
-                return Ok(new { message = "Admin Created Successfully", user });
+                return Ok(new { message = "User Created Succesfull", user });
             }
             catch (Exception ex)
             {

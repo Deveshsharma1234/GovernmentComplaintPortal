@@ -41,7 +41,7 @@ const AdminRegister = () => {
         e.preventDefault();
         try {
             const data = await registerAdminUser(formData);
-
+            
             if (data?.message === "User Created Succesfull") {
                 toast.success("Registration successful!");
                 setTimeout(() => {

@@ -35,19 +35,16 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
                 throw new KeyNotFoundException($"User with ID {UserId} was not found.");
             }
 
-            user.ActiveState = false;
+            user.ActiveState = 0;
             _context.users.Update(user);
             await _context.SaveChangesAsync();
 
             return user;
-           
-            
-
         }
 
         public async Task<List<UserResponseDto>> GetAllUser()
         {
-            return await _context.users.Where(u => u.ActiveState == true).Select(u => new UserResponseDto
+            return await _context.users.Where(u => u.ActiveState == 1).Select(u => new UserResponseDto
             {
                 Address = u.Address,
                 City = u.City,

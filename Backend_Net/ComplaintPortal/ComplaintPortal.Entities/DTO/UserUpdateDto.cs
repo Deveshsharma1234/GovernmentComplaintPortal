@@ -8,7 +8,7 @@ namespace ComplaintPortal.Entities.DTO
 {
   public  class UserUpdateDto
     {
-      
+        public int UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
      
@@ -18,8 +18,10 @@ namespace ComplaintPortal.Entities.DTO
         public string State { get; set; }
         public string District { get; set; }
         public string City { get; set; }
-     
-
+        //public int RoleId { get; set; }
+        //public int ActiveState { get; set; }
+        //public string? ModifiedBy { get; set; }
+        //public DateTime? ModifiedDate { get; set; }
 
     }
 }
