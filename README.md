@@ -12,8 +12,6 @@ A centralized platform enabling citizens to register grievances related to publi
 
 🛡️ Authentication: Secure login for both users and officials.
 
-📧 Email Notifications: Status updates via email alerts.
-
 📊 Dashboard: Real-time analytics for complaint trends, resolutions, and departmental performance.
 
 🛠️ Tech Stack
@@ -25,39 +23,22 @@ You can swap out frameworks/libraries based on your stack preferences.
 📦 Installation
 Clone the repository:
 
-bash
-Copy
-Edit
-git clone https://github.com/your-username/mygov-complaint-portal.git
-cd mygov-complaint-portal
+
+[git clone https://github.com/your-username/mygov-complaint-portal.git](https://github.com/Deveshsharma1234/GovernmentComplaintPortal.git)
+
 Install dependencies:
 
-bash
-Copy
-Edit
 npm install         # for frontend
 cd backend
 npm install         # or mvn clean install for Spring Boot
 Configure environment:
 
-Create .env file for backend
 
-env
-Copy
-Edit
-DB_URL=your_db_url
-JWT_SECRET=your_secret_key
-EMAIL_USER=your_email
-EMAIL_PASS=your_password
 Run the project:
 
-bash
-Copy
-Edit
 npm start         # frontend
 npm run dev       # backend (or use Spring Boot run command)
-📷 Screenshots
-Add screenshots of:
+
 
 User Complaint Form
 
