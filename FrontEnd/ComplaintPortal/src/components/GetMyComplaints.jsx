@@ -12,7 +12,7 @@ const GetMyComplaints = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const res = await axios.get(BASE_URL + "/myComplaints",{withCredentials: true}); // Update with your actual endpoint
+        const res = await axios.get(BASE_URL + "/myComplaints",{withCredentials: true}); 
         setComplaints(res.data.complaints);
       } catch (err) {
         console.error("Error fetching complaints:", err);
@@ -50,7 +50,8 @@ const GetMyComplaints = () => {
                 img && (
                   <img
                     key={i}
-                    src={`${BASE_URL}${img}`}
+                    // src={`${BASE_URL}${img}`}
+                    src={BASE_URL+`${img}`}
                     alt={`Complaint ${complaint.ComplaintID} img${i + 1}`}
                     className="w-full h-24 object-cover rounded-md border border-purple-200"
                   />

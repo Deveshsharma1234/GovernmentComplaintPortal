@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cookieParser = require('cookie-parser')
 const {connectDB} =require('./config/db')
@@ -12,6 +11,7 @@ const wardsRouter = require('./routes/wards')
 const cors = require('cors');
 const app = express();
 const path = require('path');
+const morgan = require('morgan')
 
 // Serve the uploads folder statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -26,6 +26,7 @@ app.use(cookieParser(),cors(
 ))
 
 
+app.use(morgan('dev')) //added logger to middle ware
 
 app.use("/",authRouter,userRouter,stateRouter,districtRouter,citiesRouter,wardsRouter)
 app.use("/",complaintRouter);

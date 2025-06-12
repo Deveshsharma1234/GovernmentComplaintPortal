@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {toggleSideBar } from '../../redux/slice/toggleSideBarSlice';
 import { useSelector } from 'react-redux';
 import { IoInformation } from 'react-icons/io5';
-
+import { RiCloseCircleFill } from "react-icons/ri";
 
 
 const SideBar = () => {
@@ -17,7 +17,7 @@ const toggleSidebar = () => dispatch(toggleSideBar())
      <aside
 
   className={`bg-base-200   h-screen left-0 z-50 transition-all duration-300 ${
-    isOpen ? 'w-64' : 'w-3'
+    isOpen ? 'w-70' : 'w-7'
   }`}
 >
   {/* Show only handle when closed */}
@@ -39,7 +39,8 @@ const toggleSidebar = () => dispatch(toggleSideBar())
           Complaint Portal
         </div>
         <button className="btn btn-sm btn-ghost" onClick={toggleSidebar}>
-          ✕
+         <RiCloseCircleFill className="text-2xl text-gray-500 hover:text-red-700 hover:drop-shadow-[0_0_6px_rgba(185,28,28,0.8)] transition duration-300 cursor-pointer" />
+
         </button>
       </div>
 

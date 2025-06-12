@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ComplaintPortal.DataAccess\ComplaintPortal.DataAccess.csproj" />
+	  
   </ItemGroup>
 
 </Project>

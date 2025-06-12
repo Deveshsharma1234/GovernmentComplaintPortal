@@ -2,7 +2,7 @@ using ComplaintPortal.Attributes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
 using ComplaintPortal.Entities.DTO.RequestDtos;
-using ComplaintPortal.Helpers;
+using ComplaintPortal.Entities.Helpers;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -37,11 +37,11 @@ namespace ComplaintPortal.Controllers
             return Ok(new {complaints});
         }
 
-        [HttpGet("mycomplaints")] // GET /api/Complaint/mycomplaints
+        [HttpGet("/api/myComplaints")] // GET /api/Complaint/mycomplaints
         [RoleAuthorize(1, 2, 3, 4)]
         public async Task<IActionResult> GetMyComplaints()
         {
-            // Ensure User.GetUserIdFromClaims() correctly extracts the user ID from the JWT token.
+            //  User.GetUserIdFromClaims() extracts the user ID from the JWT token.
             // This method would likely be an extension method defined elsewhere.
             var userId = User.GetUserIdFromClaims();
             if (userId == 0) // Assuming 0 or some other value indicates user ID not found
@@ -79,13 +79,9 @@ namespace ComplaintPortal.Controllers
                 return BadRequest(ModelState);
             }
 
-            // You might want to get the UserID and CreatedBy from the authenticated user's claims here
-             //request.UserID = User.GetUserIdFromClaims(); // Example
-            // request.CreatedBy = User.Identity.Name; // Example
-
             await _complaintService.RegisterComplaintAsync(request);
-            //return StatusCode(201, new { message = "Complaint registered successfully!" }); // Use 201 Created status
-            return Created(nameof(RegisterComplaint), "Complaint Registered Succesfully");
+            return StatusCode(201, new { message = "Complaint registered successfully" }); // Use 201 Created status
+            
         }
 
         [HttpPatch("/api/complaints")] // PATCH /api/Complaint/{complaintId}/status
@@ -128,7 +124,7 @@ namespace ComplaintPortal.Controllers
 
         // --- Complaint Type Endpoints ---
 
-        [HttpGet("types")] // GET /api/Complaint/types
+        [HttpGet("/api/complaints/types")] // GET /api/Complaint/types
         public async Task<IActionResult> GetAllComplaintTypes()
         {
             var types = await _complaintService.GetAllComplaintTypesAsync();

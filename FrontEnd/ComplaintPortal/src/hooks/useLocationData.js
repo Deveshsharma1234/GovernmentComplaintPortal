@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
+import apiClient from '../utils/apiClient';
 
 const useLocationData = (selectedState, selectedDistrict,selectedCity) => {
   const [states, setStates] = useState([]);
@@ -10,7 +11,7 @@ const useLocationData = (selectedState, selectedDistrict,selectedCity) => {
 
   // Fetch all states
   useEffect(() => {
-    axios.get(`${BASE_URL}/getAllStates`, { withCredentials: true })
+    apiClient.get(`${BASE_URL}/getAllStates`, { withCredentials: true })
       .then(res => {
         const stateData = res.data?.states|| res.data?.Result|| [];
         console.log(stateData);
@@ -27,7 +28,7 @@ const useLocationData = (selectedState, selectedDistrict,selectedCity) => {
     if (selectedState) {
       const stateObj = states.find(state => state.State === selectedState);
       if (stateObj) {
-        axios.get(`${BASE_URL}/district/${stateObj.StateId}`, { withCredentials: true })
+        apiClient.get(`${BASE_URL}/district/${stateObj.StateId}`, { withCredentials: true })
           .then(res => {
             const districtData = res.data?.districts || [];
             setDistricts(districtData);
@@ -47,7 +48,7 @@ const useLocationData = (selectedState, selectedDistrict,selectedCity) => {
     if (selectedDistrict) {
       const districtObj = districts.find(d => d.District === selectedDistrict);
       if (districtObj) {
-        axios.get(`${BASE_URL}/cities/${districtObj.DistrictID}`, { withCredentials: true })
+        apiClient.get(`${BASE_URL}/cities/${districtObj.DistrictID}`, { withCredentials: true })
           .then(res => {
             const cityData = res.data?.cities || [];
             setCities(cityData);

@@ -84,8 +84,8 @@ namespace ComplaintPortal.Business.Classes
                     City = dto.City,
                     RoleId = dto.RoleId,
                     Password = passwordHash,
-                    //ActiveState = true as its default value is true or 1 already
-                    ActiveState = 1
+                    ActiveState = true //as its default value is true or 1 already
+                    //ActiveState = 1
                 };
                 return await userRepo.AddUserAsync(newUser);
 
@@ -146,26 +146,7 @@ namespace ComplaintPortal.Business.Classes
 
             }
 
-
         }
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -3,13 +3,14 @@ import { toast } from "react-toastify";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { addUser } from "../redux/slice/userSlice";
+import apiClient from "../utils/apiClient";
 
 const useUpdateProfile = () => {
     const dispatch = useDispatch();
 
     return async (formData) => {
         try {
-            const response = await axios.patch(`${BASE_URL}/user`, formData, {
+            const response = await apiClient.patch(`${BASE_URL}/user`, formData, {
                 withCredentials: true,
             });
 

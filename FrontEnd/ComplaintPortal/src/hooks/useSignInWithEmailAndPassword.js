@@ -36,16 +36,17 @@ const useSignInWithEmailAndPassword = () => {
                 return;
             }
 
-
+//adding to local
             if (data.user) {
-                //just for testing purpose
+                //for making user persistent across refreshes
                 localStorage.setItem("email", Email);
                 localStorage.setItem("password", Password);
                 //for redux store
                 dispatch(addUser(data.user));
-                toast('🦄 Wow Logged in', {
+
+                toast('Loggin In', {
                     position: "top-right",
-                    autoClose: 5000,
+                    autoClose: 4000,
                     hideProgressBar: false,
                     closeOnClick: false,
                     pauseOnHover: true,
@@ -56,9 +57,9 @@ const useSignInWithEmailAndPassword = () => {
                 });
                 setTimeout(() => {
                     navigate("/");
-                }, 2000)
+                }, 3000)
             } else {
-                toast.error(loggedInUser.error, { theme: "dark" });
+                toast.error("Login Failed", { theme: "dark" });
             }
         } catch (error) {
             console.log(error.messate);

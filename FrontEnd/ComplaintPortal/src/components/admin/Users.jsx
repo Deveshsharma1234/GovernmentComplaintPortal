@@ -85,12 +85,12 @@ const Users = () => {
             </div>
           </div>
 
-          {/* User Table */}
+          {/* User Table Component*/}
           <div className="bg-base-100 p-4 rounded-box shadow-md">
             <UserTable props={filteredUsers} onBlock={handleBlock} />
           </div>
 
-          {/* Add New Salesperson */}
+          {/* Add New person */}
           {Role === "Admin" && (
             <div className="flex justify-end">
               <Link to="/admin/register">

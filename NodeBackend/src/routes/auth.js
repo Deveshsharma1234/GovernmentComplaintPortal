@@ -95,7 +95,6 @@ authRouter.post("/login", (req, res) => {
     try {
         const { Email, Password } = req.body;
 
-
         const statement = `select  UserId,FirstName,LastName,Email,Phone,Address,Pincode,State,District,City,RoleId,ActiveState from users where Email = ? and Password = ? `;
         const hashedPassword = CryptoJS.SHA256(Password).toString(CryptoJS.enc.Base64);
         db.pool.query(statement, [Email, hashedPassword], (err, users) => {

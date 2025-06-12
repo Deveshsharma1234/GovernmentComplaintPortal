@@ -1,5 +1,6 @@
 import axios from "axios"
 import { BASE_URL } from "../../utils/constants"
+import apiClient from "../../utils/apiClient";
 
 
 const useComplaintStats = ()=>{
@@ -7,7 +8,7 @@ const useComplaintStats = ()=>{
     return async()=>{
 
         try {
-            const response = await axios.get(BASE_URL+"/statuses/stats",{withCredentials: true});
+            const response = await apiClient.get(BASE_URL+"/statuses/stats",{withCredentials: true});
             return response;
             
         } catch (error) {

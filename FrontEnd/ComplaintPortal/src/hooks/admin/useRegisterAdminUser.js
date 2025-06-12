@@ -1,10 +1,11 @@
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
+import apiClient from "../../utils/apiClient";
 
 const useRegisterAdminUser = () => {
     const register = async (formData) => {
         try {
-            const response = await axios.post(
+            const response = await apiClient.post(
                 `${BASE_URL}/admin/register`,
                 formData,
                 {

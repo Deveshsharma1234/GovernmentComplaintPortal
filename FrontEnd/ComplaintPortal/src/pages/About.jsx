@@ -4,8 +4,35 @@ import { Link } from 'react-router-dom';
 const About = () => {
   return (
     <div className="bg-purple-900 text-white min-h-screen flex flex-col items-center justify-center py-16 px-6">
+      <style>
+        {`
+          @keyframes gradientShift {
+            0% {
+              background-position: 0% 50%;
+            }
+            100% {
+              background-position: 200% 50%;
+            }
+          }
+
+          .animated-gradient-text {
+            background: linear-gradient(
+              to right,
+              #c084fc, /* purple-400 */
+              #facc15, /* yellow-400 */
+              #c084fc /* purple-400 again for seamless loop */
+            );
+            background-size: 200% 100%;
+            animation: gradientShift 5s linear infinite;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+          }
+        `}
+      </style>
+
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-yellow-400">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-center mb-8 animated-gradient-text">
           About National Complaint Portal
         </h1>
 

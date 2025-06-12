@@ -18,6 +18,7 @@ import GetAllComplaints from "./components/admin/GetAllComplaints";
 
 
 const appRouter = createBrowserRouter([
+    
     {
         path: "/",
         element: <App />,

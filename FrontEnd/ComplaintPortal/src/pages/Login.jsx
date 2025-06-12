@@ -5,16 +5,9 @@ import useSignInWithEmailAndPassword from "../hooks/useSignInWithEmailAndPasswor
 import { useSelector } from "react-redux";
 
 
-
-
-
-
-
-
 const Login = () => {
 
-
-  const isLoggedIn  = useSelector(store=> store.user.isLoggedIn)
+  const isLoggedIn = useSelector(store => store.user.isLoggedIn)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,21 +18,13 @@ const Login = () => {
 
   const emailRef = useRef();
   const passwordRef = useRef();
-  const login = useSignInWithEmailAndPassword();
+  const login = useSignInWithEmailAndPassword(); //custom hook
 
   const handleLogin = () => {
 
     login(emailRef, passwordRef, navigate);
 
   }
-
-
-
-
-
-
-
-
 
 
   return (
