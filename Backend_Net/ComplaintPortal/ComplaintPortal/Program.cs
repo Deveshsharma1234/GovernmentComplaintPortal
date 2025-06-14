@@ -99,7 +99,7 @@ namespace ComplaintPortal
             builder.Services.AddScoped<IStateRepository, StateRepository>();
             builder.Services.AddScoped<IWardRepository, WardRepository>();
             builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
-            builder.Services.AddScoped<IComplaintTypeRepository, ComplaintTypeRepository>(); 
+            builder.Services.AddScoped<IComplaintTypeRepository, ComplaintTypeRepository>();
             builder.Services.AddScoped<IComplaintStatusRepository, ComplaintStatusRepository>();
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
@@ -111,7 +111,7 @@ namespace ComplaintPortal
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
             builder.Services.AddScoped<IRoleService, RoleService>();
-
+            builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 
 
 
@@ -127,6 +127,7 @@ namespace ComplaintPortal
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStaticFiles();
 
             //app.UseHttpsRedirection(); //commented for making use of http 
 

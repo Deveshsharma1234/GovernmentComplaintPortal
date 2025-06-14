@@ -2,7 +2,7 @@
 using ComplaintPortal.Business.Classes;
 using ComplaintPortal.Business.Contracts;
 using ComplaintPortal.Entities.DTO;
-using ComplaintPortal.Helpers;
+using ComplaintPortal.Entities.Helpers;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +39,23 @@ namespace ComplaintPortal.Controllers
         public async Task<IActionResult> GetProfile()
         {
             var userId = User.GetUserIdFromClaims();
+
+            #region From where User came or why not httpcontex here
+            // User is automatically populated by ASP.NET Core framework
+            // This is a built-in property of ControllerBase
+            // It's equivalent to: HttpContext.User
+            /*Internally
+             public abstract class ControllerBase
+            {
+                public ClaimsPrincipal User => HttpContext?.User; // Simplified version
+
+                public HttpContext HttpContext { get; set; }
+
+                // ASP.NET Core automatically injects HttpContext here
+            }
+             */ 
+            #endregion
+
             var user = await userService.GetUserByUserId(userId);
             return Ok(new { message = "user", user });
 
@@ -55,14 +72,27 @@ namespace ComplaintPortal.Controllers
             
         }
 
-
-
         [HttpPatch()]
         public async Task<ActionResult<UserResponseDto>> UpdateProfile( [FromBody] UserUpdateDto updateUser)
         {
             try
             {
                 var userId = User.GetUserIdFromClaims();
+                #region From where User came or why not httpcontex here
+                // User is automatically populated by ASP.NET Core framework
+                // This is a built-in property of ControllerBase
+                // It's equivalent to: HttpContext.User
+                /*Internally
+                 public abstract class ControllerBase
+                {
+                    public ClaimsPrincipal User => HttpContext?.User; // Simplified version
+
+                    public HttpContext HttpContext { get; set; }
+
+                    // ASP.NET Core automatically injects HttpContext here
+                }
+                 */
+                #endregion
 
                 var updatedUser = await userService.UpdateProfile(updateUser, userId);
                 return Ok(new { message="User profile updated successfully", updatedUser });
@@ -76,8 +106,5 @@ namespace ComplaintPortal.Controllers
                 return StatusCode(500, new { message = "An error occurred while updating the profile.", details = ex.Message });
             }
         }
-
-
-
     }
 }

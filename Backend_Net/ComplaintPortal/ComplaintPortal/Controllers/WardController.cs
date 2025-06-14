@@ -17,18 +17,18 @@ namespace ComplaintPortal.Controllers
             this.wardService = wardService;
         }
 
-        [HttpGet]
+        [HttpGet("/api/wards")]
         public async Task<IActionResult> GetWards()
         {
             var wards =  await wardService.GetWards();
 
-            return Ok(new { message = "wards", wards });
+            return Ok(new {wards });
         }
-        [HttpGet("{CityId}")]
+        [HttpGet("/api/wards/{CityId}")]
         public async Task<IActionResult> GetWardsByCityId( int CityId)
         {
             var wards = await wardService.GetWardsByCity(CityId);
-            return Ok(new { message = "wards", wards });
+            return Ok(new { wards });
         }
     }
 }

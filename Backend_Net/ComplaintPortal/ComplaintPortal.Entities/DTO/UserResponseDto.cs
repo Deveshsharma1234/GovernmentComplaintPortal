@@ -20,6 +20,8 @@ namespace ComplaintPortal.Entities.DTO
         public string  City { get; set; }
         public int? RoleId { get; set; }
 
+        public bool? ActiveState { get; set; }
+
     }
 }
 

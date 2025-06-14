@@ -34,8 +34,7 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
             {
                 throw new KeyNotFoundException($"User with ID {UserId} was not found.");
             }
-
-            user.ActiveState = 0;
+            user.ActiveState = false; 
             _context.users.Update(user);
             await _context.SaveChangesAsync();
 
@@ -44,7 +43,7 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
 
         public async Task<List<UserResponseDto>> GetAllUser()
         {
-            return await _context.users.Where(u => u.ActiveState == 1).Select(u => new UserResponseDto
+            return await _context.users.Where(u => u.ActiveState == true).Select(u => new UserResponseDto
             {
                 Address = u.Address,
                 City = u.City,
@@ -58,7 +57,6 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
                 State = u.State,
                 UserId = u.UserId
                 
-
             }).ToListAsync();
         }
 
@@ -122,6 +120,8 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
             u.District = updateUser.District;
             u.City = updateUser.City;
 
+
+
             await _context.SaveChangesAsync();
 
             // Return updated user as DTO
@@ -137,8 +137,8 @@ namespace ComplaintPortal.DataAccess.Repository.Classes
                 Pincode = u.Pincode,
                 RoleId = u.RoleId,
                 State = u.State,
-                UserId = u.UserId
-
+                UserId = u.UserId,
+                ActiveState = u.ActiveState
                 // Map other fields as needed...
             };
         }

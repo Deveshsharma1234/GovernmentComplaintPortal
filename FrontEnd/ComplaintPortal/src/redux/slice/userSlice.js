@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
+//getting user from local storage 
 const storedUser = localStorage.getItem("user");
 const user = storedUser ? JSON.parse(storedUser) : null;
+// console.log(storedUser);
+
 const isLoggedIn = user? true: false;
 
 const userSlice = createSlice({
@@ -20,7 +22,9 @@ const userSlice = createSlice({
         removeUser : (state)=>{
             state.user = null;
             state.isLoggedIn = false
-            localStorage.removeItem("user")
+            localStorage.removeItem("email");
+            localStorage.removeItem("user");
+            localStorage.removeItem("password");
         }
     }
 

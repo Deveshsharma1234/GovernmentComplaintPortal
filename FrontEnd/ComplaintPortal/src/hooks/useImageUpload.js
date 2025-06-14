@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 export default function useImageUpload() {
   const [images, setImages] = useState({
-    Image1: null,
-    Image2: null,
-    Image3: null,
-  });
+                                        Image1: null,
+                                        Image2: null,
+                                        Image3: null,
+                                      });
 
   const handleImageChange = (e) => {
     const { name, files } = e.target;

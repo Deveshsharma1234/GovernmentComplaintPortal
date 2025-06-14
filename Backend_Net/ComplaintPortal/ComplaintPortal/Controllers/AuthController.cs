@@ -60,8 +60,6 @@ namespace ComplaintPortal.Controllers
         [HttpPost("/api/login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-
-
             try
             {
                 if (loginDto == null)
