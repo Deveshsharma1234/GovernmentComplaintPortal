@@ -18,12 +18,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(express.json());
-app.use(cookieParser(),cors(
-    {
-        origin: "http://localhost:5173",
-        credentials: true
-    }
-))
+app.use(cookieParser());
+app.use(cors({
+    origin: ["http://localhost:5173", "https://3.83.42.183"],
+    credentials: true
+}));
 
 
 app.use(morgan('dev')) //added logger to middle ware
