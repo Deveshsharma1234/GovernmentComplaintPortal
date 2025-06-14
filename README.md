@@ -1,68 +1,75 @@
-🏛️ MyGov Complaint Portal
+# 🏛️ MyGov Complaint Portal
 A centralized platform enabling citizens to register grievances related to public services and governance. It empowers transparency, responsiveness, and accountability through digital engagement between citizens and government authorities.
 
-🚀 Features
-📝 Complaint Registration: Users can submit complaints under various categories (e.g., sanitation, roads, public transport).
+## 🚀 Features    
+- 📝 Complaint Registration: Users can submit complaints under various categories (e.g., sanitation, roads, public transport).
 
-🔍 Track Complaints: Users can view complaint status using a unique tracking ID.
+- 🔍 Track Complaints: Users can view complaint status using a unique tracking ID.
 
-📁 Admin Panel: Government officials can view, assign, and resolve complaints.
+- 📁 Admin Panel: Government officials can view, assign, and resolve complaints.
 
-🗃️ Category Management: Admins can manage complaint categories dynamically.
+- 🗃️ Category Management: Admins can manage complaint categories dynamically.
 
-🛡️ Authentication: Secure login for both users and officials.
+- 🛡️ Authentication: Secure login for both users and officials.
 
-📊 Dashboard: Real-time analytics for complaint trends, resolutions, and departmental performance.
+- 📊 Dashboard: Real-time analytics for complaint trends, resolutions, and departmental performance.
 
-🛠️ Tech Stack
-Frontend	Backend	Database	Others
-React.js / HTML/CSS	Node.js / Express / Spring Boot (choose one)	MySQL / MongoDB	JWT Auth, Nodemailer, Bootstrap, Axios
+## 🛠️ Tech Stack
+### Frontend	Backend	Database	Others
+- React.js / HTML/CSS	Node.js / Express /ASP .NET Core (choose one),	MySQL JWT Auth,Axios
 
 You can swap out frameworks/libraries based on your stack preferences.
 
-📦 Installation
-Clone the repository:
+## 📦 Installation
+1. Clone the repository:
 
+  [GovernmentComplaintPortal](https://github.com/Deveshsharma1234/GovernmentComplaintPortal.git)
 
-[git clone https://github.com/your-username/mygov-complaint-portal.git](https://github.com/Deveshsharma1234/GovernmentComplaintPortal.git)
+2. Install dependencies:
+```.sh
 
-Install dependencies:
-
+cd Frontend/ComplaintPortal
 npm install         # for frontend
-cd backend
-npm install         # or mvn clean install for Spring Boot
-Configure environment:
-
+cd NodeBackend
+npm install         # or use dotnet similar to setup dependencies
+```
 
 Run the project:
 
-npm start         # frontend
-npm run dev       # backend (or use Spring Boot run command)
+```.sh
 
+# frontend on frontend path
+npm run dev      
+# backend (use node or ASP dot net similar)
+# For node
+node app.js
 
-User Complaint Form
+```
+## Major Feautres
 
-Admin Dashboard
+- User Complaint Form
 
-Complaint Tracking Page
+- Admin Dashboard
 
-🔐 Security Measures
-Passwords hashed with bcrypt
+- Complaint Tracking Page
 
-Role-based access control
+## 🔐 Security Measures
+- Passwords hashed with bcrypt
 
-Input validation & sanitization
+- Role-based access control
 
-Protection against XSS & CSRF
+- Input validation & sanitization
 
-📈 Future Enhancements
-Mobile app integration
+- Protection against XSS & CSRF
 
-Chatbot support for complaint registration
+## 📈 Future Enhancements
+- Mobile app integration
 
-Real-time tracking via GPS for field agents
+- Chatbot support for complaint registration
 
-Multi-language support
+- Real-time tracking via GPS for field agents
 
-🤝 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+- Multi-language support
+
+## 🤝 Contributing
+  Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
