@@ -1,15 +1,17 @@
-﻿using System;
+﻿using ComplaintPortal.Business.Contracts;
+using ComplaintPortal.DataAccess.Helper;
+using ComplaintPortal.DataAccess.Repository.Contracts;
+using ComplaintPortal.Entities.DTO;
+using ComplaintPortal.Entities.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
-using ComplaintPortal.Business.Contracts;
-using ComplaintPortal.DataAccess.Helper;
-using ComplaintPortal.DataAccess.Repository.Contracts;
-using ComplaintPortal.Entities.DTO;
-using ComplaintPortal.Entities.Models;
 
 namespace ComplaintPortal.Business.Classes
 {
@@ -17,17 +19,24 @@ namespace ComplaintPortal.Business.Classes
     {
 
         public readonly IUserRepository userRepo;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IRefreshTokenService _refreshTokenService;
         private readonly JwtConfig _jwtConfig;  //jwt service obj.
+        private readonly JwtSettings _jwtSettings;
 
 
         //AuthServie ctor
-        public AuthService(IUserRepository userRepo, JwtConfig jwtConfig)
+        public AuthService(IUserRepository userRepo, JwtConfig jwtConfig,
+            JwtSettings jwtSettings, IRefreshTokenRepository refreshTokenRepository, IRefreshTokenService refreshTokenService)
         {
             this.userRepo = userRepo;
             _jwtConfig = jwtConfig;
+            _jwtSettings = jwtSettings;
+            _refreshTokenRepository = refreshTokenRepository;
+            _refreshTokenService = refreshTokenService;
         }
 
-        public async Task<LoginResponseDto> LoginAsync(LoginDto loginDto)
+        public async Task<TokenAndUserResponseDto> LoginAsync(LoginDto loginDto)
         {
             if (loginDto == null || string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
             {
@@ -36,6 +45,7 @@ namespace ComplaintPortal.Business.Classes
 
             // Repository method to check if the operator exists
             var user= await userRepo.GetUserByEmailAsync(loginDto.Email);
+
             if (user == null)
             {
                 throw new KeyNotFoundException("Email not found.");
@@ -48,16 +58,39 @@ namespace ComplaintPortal.Business.Classes
                 throw new UnauthorizedAccessException("Invalid password.");
             }
 
-            // Generate and return the JWT token
-            var token = await GenerateTokenAsync(user.Email, user.UserId, user.RoleId);
+            //// Generate tokens and return the JWT token
+            var tokenRefreshTokenDtoObj = await GenerateToken(user.Email, user.UserId, user.RoleId);
 
-            return new LoginResponseDto
+           
+            
+            // 4.Storing it to the table by calling refreshtoken repo 
+            //Because its an random string of base64 so needed to be stored at 
+            await _refreshTokenService.SaveRefreshTokenService(tokenRefreshTokenDtoObj.refreshToken,user);
+
+            var userResponseDto = new UserResponseDto
             {
-                Token = token,
-                User = user
-               
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+                Address = user.Address,
+                State = user.State,
+                District = user.District,
+                City = user.City,
+                RoleId = user.RoleId,
+                ActiveState = user.ActiveState
             };
 
+            // 6. Return response (optional: send user details in body)
+            return new TokenAndUserResponseDto
+            {
+                 UserResponse = userResponseDto,
+                // Do NOT send tokens in the body if you're using HttpOnly cookies exclusively
+                //But we are just sending it to controller only
+                Token = tokenRefreshTokenDtoObj.token,
+                RefreshToken = tokenRefreshTokenDtoObj.refreshToken,
+            };
         }
 
         public async Task<user> RegisterAdminAsync(RegisterAdminDto dto)
@@ -160,8 +193,8 @@ namespace ComplaintPortal.Business.Classes
                 return Convert.ToBase64String(bytes);
             }
         }
-        //Converting Hash to human redable format 
-        private bool VerifyPassword(string password, string hashedPassword)
+        //Comparing Hash to human redable format 
+        private static bool VerifyPassword(string password, string hashedPassword)
         {
             using (var sha256 = SHA256.Create())
             {
@@ -171,11 +204,19 @@ namespace ComplaintPortal.Business.Classes
             }
         }
 
-
-
-        public async Task<string> GenerateTokenAsync(string email, int crewId, int ? roleId)
+        public Task<TokenAndRefreshTokenDto> GenerateToken(string email, int userId, int? roleId)
         {
-            return await Task.FromResult(_jwtConfig.GenerateToken( email, crewId, roleId));
+            var accessToken = _jwtConfig.GenerateAccessToken(email, userId, roleId);
+
+            //// 3. Generate and Store Refresh Token
+            var refreshTokenString = _jwtConfig.GenerateRefreshToken();
+
+            return Task.FromResult(new TokenAndRefreshTokenDto
+            {
+                token = accessToken,
+                refreshToken = refreshTokenString
+            });
+
         }
 
         #endregion

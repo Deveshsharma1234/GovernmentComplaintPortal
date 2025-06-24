@@ -46,7 +46,7 @@ const RegisterComplaint = () => {
           districts={districts}
           cities={cities}
           wards={wards}
-          selectedState={selectedState}
+          selectedState={selectedState} 
           selectedDistrict={selectedDistrict}
           selectedCity={selectedCity}
           selectedWard={selectedWard}

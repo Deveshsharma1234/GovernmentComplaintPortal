@@ -13,6 +13,7 @@ namespace ComplaintPortal.Business.Contracts
     {
         Task<user> RegisterCitizenAsync(RegisterCitizenDto dto);
         Task<user> RegisterAdminAsync(RegisterAdminDto dto);
-        Task<LoginResponseDto> LoginAsync(LoginDto dto);
+        Task<TokenAndUserResponseDto> LoginAsync(LoginDto dto);
+        Task<TokenAndRefreshTokenDto> GenerateToken(string email, int userId, int? roleId);
     }
 }

@@ -24,7 +24,7 @@ const userSlice = createSlice({
             state.isLoggedIn = false
             localStorage.removeItem("email");
             localStorage.removeItem("user");
-            localStorage.removeItem("password");
+            // localStorage.removeItem("password");
         }
     }
 

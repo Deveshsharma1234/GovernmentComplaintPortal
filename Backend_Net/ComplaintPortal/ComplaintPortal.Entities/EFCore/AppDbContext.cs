@@ -35,10 +35,12 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ward> wards { get; set; }
 
-/*    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=12345;database=Municipal_Complaint", ServerVersion.Parse("8.0.41-mysql"));
-*/
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
+    /*    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+            => optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=12345;database=Municipal_Complaint", ServerVersion.Parse("8.0.41-mysql"));
+    */
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -228,6 +230,29 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.CityNavigation).WithMany(p => p.wards)
                 .HasForeignKey(d => d.CityID)
                 .HasConstraintName("wards_ibfk_1");
+        });
+
+
+        // Add configuration for your new RefreshToken entity
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.Id); // Ensure primary key is defined
+
+            #region Optional
+            // Optional: You can explicitly define column names, lengths, etc. if you wish
+            // entity.Property(e => e.Token).HasMaxLength(256).IsRequired();
+            // entity.Property(e => e.Expires).IsRequired();
+            // entity.Property(e => e.Created).IsRequired();
+            // entity.Property(e => e.Revoked).IsRequired(false); // Make nullable if it is
+
+            #endregion
+
+            // Define the foreign key relationship to the 'user' table
+            // Assumes your 'user' entity has 'UserId' as its primary key
+            entity.HasOne(rt => rt.User)
+                  .WithMany() // Or WithMany(u => u.RefreshTokens) if you add a collection to 'user'
+                  .HasForeignKey(rt => rt.UserId)
+                  .HasConstraintName("FK_RefreshToken_User_UserId"); // Give it a descriptive name
         });
 
         OnModelCreatingPartial(modelBuilder);

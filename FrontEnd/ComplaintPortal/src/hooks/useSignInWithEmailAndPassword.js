@@ -29,7 +29,9 @@ const useSignInWithEmailAndPassword = () => {
                 body: JSON.stringify({ Email, Password }),
                 credentials: "include"
             });
+
             const data = await response.json();
+            
             console.log(data + "  from login");
             if (!response.ok) {
                 toast.error(data.message || "Login failed", { theme: "dark" });
@@ -38,9 +40,6 @@ const useSignInWithEmailAndPassword = () => {
 
 //adding to local
             if (data.user) {
-                //for making user persistent across refreshes
-                localStorage.setItem("email", Email);
-                localStorage.setItem("password", Password);
                 //for redux store
                 dispatch(addUser(data.user));
 

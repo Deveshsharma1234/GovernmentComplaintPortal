@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
-import axios from "axios";
 import apiClient from "../utils/apiClient";
 
 const useComplaintData =()=>{

@@ -58,6 +58,8 @@ namespace ComplaintPortal
 
             // JWT Authentication Configuration
             builder.Services.AddSingleton<JwtConfig>();
+            builder.Services.AddSingleton(builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!);
+            
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,7 +76,9 @@ namespace ComplaintPortal
                     ValidAudience = builder.Configuration["JwtSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"])
-                    )
+                    ),
+                    ClockSkew = TimeSpan.Zero //  Removes the default 5 minute "grace period" for token expiry
+
                 };
 
                 //  Read token from cookie instead of header
@@ -88,12 +92,22 @@ namespace ComplaintPortal
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                       //if the token is expired, this event will be triggered
+                        Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        // we can check if user is still active in DB
+                        return Task.CompletedTask;
                     }
                 };
             });
 
 
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
             builder.Services.AddScoped<IStateRepository, StateRepository>();
@@ -102,6 +116,9 @@ namespace ComplaintPortal
             builder.Services.AddScoped<IComplaintTypeRepository, ComplaintTypeRepository>();
             builder.Services.AddScoped<IComplaintStatusRepository, ComplaintStatusRepository>();
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICityService, CityService>();
@@ -111,12 +128,14 @@ namespace ComplaintPortal
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
             builder.Services.AddScoped<IRoleService, RoleService>();
+
             builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
+            builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
 
 
-            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddHttpContextAccessor(); //if we want to access user from http context instead of custom IUserService
             #endregion
 
             var app = builder.Build();
