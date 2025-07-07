@@ -1,16 +1,8 @@
 const authAndAuthorize = require("../middleware/authAndAuthorize");
 const express = require('express');
 const pingRouter = express.Router();
-pingRouter.get("/ping/pingWithAuth",(req,res)=>{
-      const token = req.cookies?.token;
-     //    console.log("Token:", token);
-
-        if (!token) {
-            return res.status(401).json({ message: "Unauthorized: Token not found" });
-        }
-        else{
-          res.send("Token is Valid");
-        }
+pingRouter.get("/ping/pingWithAuth",authAndAuthorize(1,2,3,4),(req,res)=>{
+     res.send("Tokens are valid");
 });
 
 module.exports = pingRouter;
