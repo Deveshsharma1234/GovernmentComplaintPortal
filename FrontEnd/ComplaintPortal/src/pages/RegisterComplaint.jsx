@@ -15,7 +15,7 @@ const RegisterComplaint = () => {
 // extracting location data from custom hook
   const { states, districts, cities, wards } = useLocationData(selectedState, selectedDistrict, selectedCity);
   
-  //an intial state of object
+  //an initial state of object
   const initialState = {
     WardID: '',
     GeoLat: '',

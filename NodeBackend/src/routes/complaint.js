@@ -348,6 +348,23 @@ complaintRouter.get("/complaint-types/stats", authAndAuthorize(1, 2, 3), (req, r
     }
 });
 
+complaintRouter.get("/complaints/types", authAndAuthorize(1, 2, 3, 4), (req, res) => {
+  try {
+    const queryText = `SELECT ComplaintTypeID, ComplaintType, Description FROM complainttype`;
+
+    db.pool.execute(queryText, (err, result) => {
+      if (!err) {
+        // result[0] contains the rows when using mysql2
+        res.json({ types: result }); 
+      } else {
+        console.error("SQL Error", err);
+        res.status(500).json({ message: "Database Error" });
+      }
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 module.exports = complaintRouter;
 

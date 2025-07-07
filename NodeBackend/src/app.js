@@ -8,6 +8,7 @@ const stateRouter = require('./routes/state')
 const districtRouter = require('./routes/district')
 const citiesRouter = require('./routes/cities')
 const wardsRouter = require('./routes/wards')
+const pingRouter = require('./routes/ping');
 const cors = require('cors');
 const app = express();
 const path = require('path');
@@ -28,7 +29,7 @@ app.use(cors({
 app.use(morgan('dev')) //added logger to middle ware
 
 app.use("/",authRouter,userRouter,stateRouter,districtRouter,citiesRouter,wardsRouter)
-app.use("/",complaintRouter);
+app.use("/",complaintRouter,pingRouter);
 
 // Directly call connectDB without promises
 connectDB(); 
