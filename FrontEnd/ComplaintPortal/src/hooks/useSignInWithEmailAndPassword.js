@@ -38,7 +38,7 @@ const useSignInWithEmailAndPassword = () => {
 
 //adding to local
             if (data.user) {
-                //for making user persistent across refreshes
+                //for testing purpose
                 localStorage.setItem("email", Email);
                 localStorage.setItem("password", Password);
                 //for redux store
