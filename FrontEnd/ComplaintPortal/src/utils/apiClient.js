@@ -6,7 +6,7 @@ import { BASE_URL } from './constants';
 
 // Create axios instance
 const apiClient = axios.create({
-  baseURL: BASE_URL, //base url
+  // baseURL: BASE_URL, //base url
   withCredentials: true, // Send cookies with requests
 });
 
