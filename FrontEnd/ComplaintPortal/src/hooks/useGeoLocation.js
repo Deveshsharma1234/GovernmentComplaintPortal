@@ -1,4 +1,4 @@
-// hooks/useGeoLocation.js
+
 import { useGeolocated } from "react-geolocated";
 
 const useGeoLocation = () => {

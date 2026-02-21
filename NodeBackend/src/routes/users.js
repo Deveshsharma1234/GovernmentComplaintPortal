@@ -161,14 +161,8 @@ userRouter.delete("/user/:UserId", authAndAuthorize(1), (req, res) => {
     const statement = 'UPDATE users SET ActiveState = false WHERE UserId = ?';
 
     db.pool.execute(statement, [UserId], (error, result) => {
-        if (error) {
-            return res.status(400).json({ error: error.message });
-        }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: "User not found or already deactivated" });
-        }
-
+        if (error) return res.status(400).json({ error: error.message });
+        if (result.affectedRows === 0)  return res.status(404).json({ message: "User not found or already deactivated" });
         return res.status(200).json({
             message: "User Deactivated",
             result

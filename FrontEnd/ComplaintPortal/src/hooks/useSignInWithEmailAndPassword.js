@@ -38,10 +38,10 @@ const useSignInWithEmailAndPassword = () => {
 
 //adding to local
             if (data.user) {
-                //for making user persistent across refreshes
+                
                 localStorage.setItem("email", Email);
                 localStorage.setItem("password", Password);
-                //for redux store
+
                 dispatch(addUser(data.user));
 
                 toast('Loggin In', {

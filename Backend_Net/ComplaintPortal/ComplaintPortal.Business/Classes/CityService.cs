@@ -20,7 +20,7 @@ namespace ComplaintPortal.Business.Classes
         }
         public async Task<List<city>> CitiesByDistrictId(int districtId)
         {
-            if(districtId != null) return await cityRepository.CitiesByDistrictId(districtId);
+            if(districtId != 0) return await cityRepository.CitiesByDistrictId(districtId);
             throw new Exception("District Id not found");
         }
 

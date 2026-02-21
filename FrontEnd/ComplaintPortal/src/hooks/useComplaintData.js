@@ -27,7 +27,7 @@ const useComplaintData =()=>{
                 console.log(complaintTypes);
             }
     };
-    //fetch data on Component Mount
+  
     useEffect(()=>{fetchComplaintTypes();},[]);
 
     return {

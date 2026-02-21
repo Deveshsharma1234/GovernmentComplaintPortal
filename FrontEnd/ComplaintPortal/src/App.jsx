@@ -14,7 +14,6 @@ const dispatch = useDispatch();
 const isLoggedIn  = useSelector(store=> store.user.isLoggedIn) ;//extracting from store
 const location = useLocation(); //for getting properties of browswer like window.location.pathname
 const navigate = useNavigate(); //react router dom 
-// debugger
   const hiddenPaths = ["/login", "/register"];
   const shouldHideHeaderFooter = hiddenPaths.includes(location.pathname); //on login and register hide header and footer
 

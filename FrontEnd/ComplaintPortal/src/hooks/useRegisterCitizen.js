@@ -11,10 +11,10 @@ const useRegisterCitizen = () => {
         formData,
         { withCredentials: true }
       );
-      return response.data; // ✅ Fix: Return response data
+      return response.data;
     } catch (error) {
     
-      throw error; // ✅ Fix: Re-throw error so the calling function can handle it
+      throw error; 
     }
   };
 

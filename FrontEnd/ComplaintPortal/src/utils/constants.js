@@ -1,7 +1,8 @@
-// export const  BASE_URL = "http://localhost:4000";//for node localhost
-// export const  BASE_URL = "https://localhost:50297/api";
+// export const  BASE_URL = "http://localhost:4000";//for  localhost
+export const BASE_URL = "http://localhost:50001/api";
+
 // export const  BASE_URL = "http://localhost:50298/api";// for dotnet
-export const BASE_URL = "https://3.83.42.183/api"////for node Production
+// export const BASE_URL = "https://3.83.42.183/api"//for node Production
 
 
 //Development url

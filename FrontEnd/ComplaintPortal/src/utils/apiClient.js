@@ -6,8 +6,8 @@ import { BASE_URL } from './constants';
 
 // Create axios instance
 const apiClient = axios.create({
-  baseURL: BASE_URL, //base url
-  withCredentials: true, // Send cookies with requests
+  baseURL: BASE_URL,
+  withCredentials: true, 
 });
 
 // Added response interceptor
@@ -16,13 +16,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Unauthorized - token expired or invalid
-      // Dispatch logout
+    
       store.dispatch(removeUser());
       
-      // Optional: Redirect to login page
-      // Since this is outside React components, you need to get access to navigate
-      // One way: use a custom hook or set up a navigation utility
+     
 
     }
     return Promise.reject(error);

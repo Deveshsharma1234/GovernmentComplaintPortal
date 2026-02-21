@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import apiClient from '../utils/apiClient';
 
 export default function useComplaintForm(initialState) {
-  const [formData, setFormData] = useState(initialState); //getting and setting intial state of form data obj
+  const [formData, setFormData] = useState(initialState); 
   const [message, setMessage] = useState('');
 
   //creating obj with updated key values
