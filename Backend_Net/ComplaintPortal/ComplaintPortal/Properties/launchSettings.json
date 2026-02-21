@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "ComplaintPortal": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      //"applicationUrl": "https://localhost:50297;http://localhost:50298"
+      "applicationUrl": "http://localhost:50298"
+    }
+  }
+}

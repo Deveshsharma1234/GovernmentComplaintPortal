@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useLocationData from '../hooks/useLocationData';
 
 import useUpdateProfile from '../hooks/useUpdateProile';
